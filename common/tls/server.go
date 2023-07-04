@@ -17,6 +17,8 @@ func NewServer(ctx context.Context, router adapter.Router, logger log.Logger, op
 	}
 	if options.Reality != nil && options.Reality.Enabled {
 		return NewRealityServer(ctx, router, logger, options)
+	} else if options.JLS != nil && options.JLS.Enabled {
+		return NewJLSServer(ctx, router, logger, options)
 	} else {
 		return NewSTDServer(ctx, router, logger, options)
 	}

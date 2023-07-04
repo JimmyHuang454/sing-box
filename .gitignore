@@ -13,3 +13,5 @@
 /*.xcframework/
 .DS_Store
 /config.d/
+*~
+[._]*.un~

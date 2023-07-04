@@ -14,6 +14,7 @@ type InboundTLSOptions struct {
 	KeyPath         string                 `json:"key_path,omitempty"`
 	ACME            *InboundACMEOptions    `json:"acme,omitempty"`
 	Reality         *InboundRealityOptions `json:"reality,omitempty"`
+	JLS             *JLSOptions            `json:"jls,omitempty"`
 }
 
 type OutboundTLSOptions struct {
@@ -30,6 +31,13 @@ type OutboundTLSOptions struct {
 	ECH             *OutboundECHOptions     `json:"ech,omitempty"`
 	UTLS            *OutboundUTLSOptions    `json:"utls,omitempty"`
 	Reality         *OutboundRealityOptions `json:"reality,omitempty"`
+	JLS             *JLSOptions            `json:"jls,omitempty"`
+}
+
+type JLSOptions struct {
+	Enabled  bool   `json:"enabled,omitempty"`
+	IV       string `json:"random,omitempty"`
+	Password string `json:"password,omitempty"`
 }
 
 type InboundRealityOptions struct {

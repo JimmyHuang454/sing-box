@@ -34,6 +34,8 @@ func NewClient(router adapter.Router, serverAddress string, options option.Outbo
 		return NewRealityClient(router, serverAddress, options)
 	} else if options.UTLS != nil && options.UTLS.Enabled {
 		return NewUTLSClient(router, serverAddress, options)
+	} else if options.JLS != nil && options.JLS.Enabled {
+		return NewJLSlient(router, serverAddress, options)
 	} else {
 		return NewSTDClient(router, serverAddress, options)
 	}
