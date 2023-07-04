@@ -1,0 +1,88 @@
+{
+  "log": {
+    "level": "debug"
+  },
+  "dns": {
+    "servers": [
+      {
+        "address": "udp://114.114.114.114"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "type": "http",
+      "tag": "httpIn",
+      "listen": "127.0.0.1",
+      "listen_port": 8088
+    },
+    {
+      "type": "trojan",
+      "listen": "127.0.0.1",
+      "tag": "trojanIn",
+      "listen_port": 8281,
+      "tls": {
+        "enabled": true,
+        "server_name": "abc.com",
+        "jls": {
+          "enabled": true,
+          "random": "1",
+          "password": "2"
+        }
+      },
+      "users": [
+        {
+          "name": "abc",
+          "password": "abc"
+        }
+      ]
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "freedom"
+    },
+    {
+      "type": "trojan",
+      "tag": "trojanOut",
+      "server": "127.0.0.1",
+      "server_port": 8281,
+      "tls": {
+        "enabled": true,
+        "server_name": "abc.com",
+        "jls": {
+          "enabled": true,
+          "random": "1",
+          "password": "2"
+        }
+      },
+      "network": "tcp",
+      "password": "abc"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "inbound": [
+          "trojanIn"
+        ],
+        "outbound": "freedom"
+      },
+      {
+        "inbound": [
+          "httpIn"
+        ],
+        "outbound": "trojanOut"
+      },
+      {
+        "protocol": "dns",
+        "outbound": "dns-out"
+      }
+    ]
+  }
+}

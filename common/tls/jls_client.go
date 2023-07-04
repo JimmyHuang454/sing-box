@@ -1,10 +1,7 @@
 package tls
 
 import (
-	"crypto/x509"
 	"net"
-	"net/netip"
-	"os"
 
 	JLS "github.com/JimmyHuang454/JLS-go/tls"
 	"github.com/sagernet/sing-box/adapter"
@@ -45,58 +42,18 @@ func (s *JLSClientConfig) Clone() Config {
 }
 
 func NewJLSlient(router adapter.Router, serverAddress string, options option.OutboundTLSOptions) (Config, error) {
-	var serverName string
-	if options.ServerName != "" {
-		serverName = options.ServerName
-	} else if serverAddress != "" {
-		if _, err := netip.ParseAddr(serverName); err != nil {
-			serverName = serverAddress
-		}
-	}
-	if serverName == "" && !options.Insecure {
-		return nil, E.New("missing server_name or insecure=true")
-	}
-
-	var tlsConfig JLS.Config
+	tlsConfig := &JLS.Config{}
 	tlsConfig.Time = router.TimeFunc()
-	if options.DisableSNI {
-		tlsConfig.ServerName = "127.0.0.1"
-	} else {
-		tlsConfig.ServerName = serverName
+
+	if options.ServerName == "" {
+		return nil, E.New("fallback website is needed.")
 	}
-	if options.Insecure {
-		tlsConfig.InsecureSkipVerify = options.Insecure
-	} else if options.DisableSNI {
-		tlsConfig.InsecureSkipVerify = true
-		tlsConfig.VerifyConnection = func(state JLS.ConnectionState) error {
-			verifyOptions := x509.VerifyOptions{
-				DNSName:       serverName,
-				Intermediates: x509.NewCertPool(),
-			}
-			for _, cert := range state.PeerCertificates[1:] {
-				verifyOptions.Intermediates.AddCert(cert)
-			}
-			_, err := state.PeerCertificates[0].Verify(verifyOptions)
-			return err
-		}
-	}
+	tlsConfig.ServerName = options.ServerName
+
 	if len(options.ALPN) > 0 {
 		tlsConfig.NextProtos = options.ALPN
 	}
-	if options.MinVersion != "" {
-		minVersion, err := ParseTLSVersion(options.MinVersion)
-		if err != nil {
-			return nil, E.Cause(err, "parse min_version")
-		}
-		tlsConfig.MinVersion = minVersion
-	}
-	if options.MaxVersion != "" {
-		maxVersion, err := ParseTLSVersion(options.MaxVersion)
-		if err != nil {
-			return nil, E.Cause(err, "parse max_version")
-		}
-		tlsConfig.MaxVersion = maxVersion
-	}
+
 	if options.CipherSuites != nil {
 	find:
 		for _, cipherSuite := range options.CipherSuites {
@@ -112,6 +69,7 @@ func NewJLSlient(router adapter.Router, serverAddress string, options option.Out
 
 	tlsConfig.JLSPWD = []byte(options.JLS.Password)
 	tlsConfig.JLSIV = []byte(options.JLS.IV)
+	tlsConfig.UseJLS = true
 
-	return &JLSClientConfig{&tlsConfig}, nil
+	return &JLSClientConfig{tlsConfig}, nil
 }

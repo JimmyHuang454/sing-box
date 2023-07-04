@@ -9,7 +9,6 @@ import (
 )
 
 func TestJLS(t *testing.T) {
-	_, certPem, keyPem := createSelfSignedCertificate(t, "example.org")
 	startInstance(t, option.Options{
 		Inbounds: []option.Inbound{
 			{
@@ -36,10 +35,9 @@ func TestJLS(t *testing.T) {
 						},
 					},
 					TLS: &option.InboundTLSOptions{
-						Enabled:         true,
-						ServerName:      "example.org",
-						CertificatePath: certPem,
-						KeyPath:         keyPem,
+						Enabled:    false,
+						ServerName: "example.org",
+						JLS:        &option.JLSOptions{Enabled: true, IV: "abc", Password: "abc"},
 					},
 				},
 			},
@@ -58,13 +56,9 @@ func TestJLS(t *testing.T) {
 					},
 					Password: "password",
 					TLS: &option.OutboundTLSOptions{
-						Enabled:         true,
-						ServerName:      "example.org",
-						CertificatePath: certPem,
-						UTLS: &option.OutboundUTLSOptions{
-							Enabled:     true,
-							Fingerprint: "chrome",
-						},
+						Enabled:    false,
+						ServerName: "example.org",
+						JLS:        &option.JLSOptions{Enabled: true, IV: "abc", Password: "abc"},
 					},
 				},
 			},

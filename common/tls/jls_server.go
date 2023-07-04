@@ -31,7 +31,8 @@ EKTcWGekdmdDPsHloRNtsiCa697B2O9IFA==
 -----END EC PRIVATE KEY-----`)
 
 type JLSServerConfig struct {
-	config *JLS.Config
+	config   *JLS.Config
+	isCompat bool
 }
 
 // NextProtos implements tls.ServerConfig.
@@ -79,31 +80,18 @@ func (c *JLSServerConfig) Close() error {
 }
 
 func NewJLSServer(ctx context.Context, router adapter.Router, logger log.Logger, options option.InboundTLSOptions) (ServerConfig, error) {
-	if !options.Enabled {
-		return nil, nil
-	}
-	var tlsConfig *JLS.Config
+	tlsConfig := &JLS.Config{}
 	tlsConfig.Time = router.TimeFunc()
-	if options.ServerName != "" {
-		tlsConfig.ServerName = options.ServerName
+
+	if options.ServerName == "" {
+		return nil, E.New("fallback website is needed.")
 	}
+	tlsConfig.ServerName = options.ServerName
+
 	if len(options.ALPN) > 0 {
 		tlsConfig.NextProtos = append(options.ALPN, tlsConfig.NextProtos...)
 	}
-	if options.MinVersion != "" {
-		minVersion, err := ParseTLSVersion(options.MinVersion)
-		if err != nil {
-			return nil, E.Cause(err, "parse min_version")
-		}
-		tlsConfig.MinVersion = minVersion
-	}
-	if options.MaxVersion != "" {
-		maxVersion, err := ParseTLSVersion(options.MaxVersion)
-		if err != nil {
-			return nil, E.Cause(err, "parse max_version")
-		}
-		tlsConfig.MaxVersion = maxVersion
-	}
+
 	if options.CipherSuites != nil {
 	find:
 		for _, cipherSuite := range options.CipherSuites {
@@ -121,9 +109,11 @@ func NewJLSServer(ctx context.Context, router adapter.Router, logger log.Logger,
 	tlsConfig.Certificates = []JLS.Certificate{cert}
 	tlsConfig.JLSPWD = []byte(options.JLS.Password)
 	tlsConfig.JLSIV = []byte(options.JLS.IV)
+	tlsConfig.UseJLS = true
 
 	return &JLSServerConfig{
-		config: tlsConfig,
+		config:   tlsConfig,
+		isCompat: false,
 	}, nil
 }
 

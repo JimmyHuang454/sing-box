@@ -31,7 +31,7 @@ type OutboundTLSOptions struct {
 	ECH             *OutboundECHOptions     `json:"ech,omitempty"`
 	UTLS            *OutboundUTLSOptions    `json:"utls,omitempty"`
 	Reality         *OutboundRealityOptions `json:"reality,omitempty"`
-	JLS             *JLSOptions            `json:"jls,omitempty"`
+	JLS             *JLSOptions             `json:"jls,omitempty"`
 }
 
 type JLSOptions struct {
