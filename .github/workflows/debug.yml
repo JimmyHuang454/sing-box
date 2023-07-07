@@ -201,6 +201,9 @@ jobs:
           name: sing-box-${{ matrix.name }}
           path: sing-box*
 
+      - name: ls
+        run: ls
+
       - uses: vimtor/action-zip@v1
         with:
           files: sing-box-${{ matrix.name }}
