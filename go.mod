@@ -46,7 +46,7 @@ require (
 	golang.org/x/crypto v0.10.0
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
 	golang.org/x/net v0.11.0
-	golang.org/x/sys v0.9.0
+	golang.org/x/sys v0.10.0
 	golang.zx2c4.com/wireguard/wgctrl v0.0.0-20230429144221-925a1e7659e6
 	google.golang.org/grpc v1.56.1
 	google.golang.org/protobuf v1.30.0
@@ -56,7 +56,7 @@ require (
 
 require (
 	github.com/Dreamacro/protobytes v0.0.0-20230324064118-87bc784139cd // indirect
-	github.com/JimmyHuang454/JLS-go v0.0.0-20230704113801-c5680432a084 // indirect
+	github.com/JimmyHuang454/JLS-go v0.0.0-20230707174703-b3a94921007c // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/cloudflare/circl v1.2.1-0.20221019164342-6ab4dfed8f3c // indirect
