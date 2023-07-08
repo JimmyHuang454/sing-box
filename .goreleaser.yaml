@@ -97,6 +97,8 @@ archives:
     wrap_in_directory: true
     files:
       - LICENSE
+      - ./release/client/config.json
+      - ./release/client/ip.mmdb
     name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ with .Arm }}v{{ . }}{{ end }}{{ with .Mips }}_{{ . }}{{ end }}{{ if not (eq .Amd64 "v1") }}{{ .Amd64 }}{{ end }}'
 nfpms:
   - id: package
@@ -112,12 +114,12 @@ nfpms:
       - rpm
     priority: extra
     contents:
-      - src: release/config/config.json
+      - src: release/server/config.json
         dst: /etc/sing-box/config.json
         type: config
-      - src: release/config/sing-box.service
+      - src: release/server/sing-box.service
         dst: /etc/systemd/system/sing-box.service
-      - src: release/config/sing-box@.service
+      - src: release/server/sing-box@.service
         dst: /etc/systemd/system/sing-box@.service
       - src: LICENSE
         dst: /usr/share/licenses/sing-box/LICENSE

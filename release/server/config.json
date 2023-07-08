@@ -5,7 +5,7 @@
   "dns": {
     "servers": [
       {
-        "address": "tls://8.8.8.8"
+        "address": "udp://8.8.8.8"
       }
     ]
   },
