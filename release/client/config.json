@@ -50,7 +50,22 @@
     }
   ],
   "route": {
+    "geoip": {
+      "path": "./geoip.db"
+    },
     "rules": [
+      {
+        "domain_suffix": [
+          ".cn"
+        ],
+        "outbound": "freedom"
+      },
+      {
+        "geoip": [
+          "cn"
+        ],
+        "outbound": "freedom"
+      },
       {
         "inbound": [
           "httpIn"
