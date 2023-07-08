@@ -1,10 +1,15 @@
 {
   "log": {
-    "level": "info"
+    "level": "debug"
   },
   "dns": {
     "servers": [
       {
+        "tag": "local",
+        "address": "udp://114.114.114.114"
+      },
+      {
+        "address_resolver": "local",
         "address": "https://doh.pub/dns-query"
       }
     ]
@@ -14,7 +19,7 @@
       "type": "http",
       "tag": "httpIn",
       "listen": "127.0.0.1",
-      "listen_port": 8080
+      "listen_port": 8088
     }
   ],
   "outbounds": [
@@ -24,7 +29,6 @@
     },
     {
       "type": "trojan",
-      "listen": "0.0.0.0",
       "tag": "trojanOut",
       "server_port": 443,
       "tls": {
@@ -46,16 +50,22 @@
   ],
   "route": {
     "geoip": {
-      "download_url": "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb"
+      "path": "D:/my_project/sing-box/release/client/geoip.db"
     },
     "rules": [
+      {
+        "source_geoip": [
+          "private"
+        ],
+        "outbound": "freedom"
+      },
       {
         "domain_suffix": [
           ".cn"
         ],
-        "source_geoip": [
-          "private"
-        ],
+        "outbound": "freedom"
+      },
+      {
         "geoip": [
           "cn"
         ],
