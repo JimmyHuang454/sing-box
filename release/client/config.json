@@ -30,6 +30,7 @@
     {
       "type": "trojan",
       "tag": "trojanOut",
+      "server": "0.0.0.0",
       "server_port": 443,
       "tls": {
         "enabled": true,
@@ -49,28 +50,7 @@
     }
   ],
   "route": {
-    "geoip": {
-      "path": "D:/my_project/sing-box/release/client/geoip.db"
-    },
     "rules": [
-      {
-        "source_geoip": [
-          "private"
-        ],
-        "outbound": "freedom"
-      },
-      {
-        "domain_suffix": [
-          ".cn"
-        ],
-        "outbound": "freedom"
-      },
-      {
-        "geoip": [
-          "cn"
-        ],
-        "outbound": "freedom"
-      },
       {
         "inbound": [
           "httpIn"
