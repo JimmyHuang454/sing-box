@@ -97,7 +97,7 @@ archives:
     wrap_in_directory: true
     files:
       - LICENSE
-      - src: "./release/client/ip.mmdb"
+      - src: "./release/client/geoip.db"
         dst: "ip.mmdb"
       - src: "./release/client/config.json"
         dst: "config.json"
