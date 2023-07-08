@@ -25,6 +25,7 @@ func FindSDK() {
 		"$HOME/Android/Sdk",
 		"$HOME/.local/lib/android/sdk",
 		"$HOME/Library/Android/sdk",
+		os.Getenv("ANDROID_HOME"),
 	}
 	for _, path := range searchPath {
 		path = os.ExpandEnv(path)

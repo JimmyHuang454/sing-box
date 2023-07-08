@@ -27,3 +27,4 @@ jobs:
 
       - run: make release_install
       - run: make release
+      - run: ls
