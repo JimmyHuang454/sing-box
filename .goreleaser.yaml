@@ -132,7 +132,7 @@ signs:
   - artifacts: checksum
 release:
   github:
-    owner: SagerNet
+    owner: JimmyHuang454
     name: sing-box
   name_template: '{{ if .IsSnapshot }}{{ nightly }}{{ else }}{{ .Version }}{{ end }}'
   draft: true
