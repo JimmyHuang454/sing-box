@@ -1,0 +1,76 @@
+{
+  "log": {
+    "level": "info"
+  },
+  "dns": {
+    "servers": [
+      {
+        "address": "https://doh.pub/dns-query"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "type": "http",
+      "tag": "httpIn",
+      "listen": "127.0.0.1",
+      "listen_port": 8080
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "freedom"
+    },
+    {
+      "type": "trojan",
+      "listen": "0.0.0.0",
+      "tag": "trojanOut",
+      "server_port": 443,
+      "tls": {
+        "enabled": true,
+        "server_name": "www.visa.cn",
+        "jls": {
+          "enabled": true,
+          "random": "123456",
+          "password": "123456"
+        }
+      },
+      "network": "tcp",
+      "password": "abcd"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    }
+  ],
+  "route": {
+    "geoip": {
+      "download_url": "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb"
+    },
+    "rules": [
+      {
+        "domain_suffix": [
+          ".cn"
+        ],
+        "source_geoip": [
+          "private"
+        ],
+        "geoip": [
+          "cn"
+        ],
+        "outbound": "freedom"
+      },
+      {
+        "inbound": [
+          "httpIn"
+        ],
+        "outbound": "trojanOut"
+      },
+      {
+        "protocol": "dns",
+        "outbound": "dns-out"
+      }
+    ]
+  }
+}
