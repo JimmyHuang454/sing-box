@@ -11,18 +11,31 @@
   },
   "inbounds": [
     {
-      "type": "shadowsocks",
-      "listen": "::",
-      "listen_port": 8080,
-      "sniff": true,
-      "network": "tcp",
-      "method": "2022-blake3-aes-128-gcm",
-      "password": "8JCsPssfgS8tiRwiMlhARg=="
+      "type": "trojan",
+      "listen": "0.0.0.0",
+      "tag": "trojanIn",
+      "listen_port": 443,
+      "tls": {
+        "enabled": true,
+        "server_name": "www.visa.cn",
+        "jls": {
+          "enabled": true,
+          "random": "123456",
+          "password": "123456"
+        }
+      },
+      "users": [
+        {
+          "name": "abcd",
+          "password": "abcd"
+        }
+      ]
     }
   ],
   "outbounds": [
     {
-      "type": "direct"
+      "type": "direct",
+      "tag": "freedom"
     },
     {
       "type": "dns",
@@ -31,6 +44,12 @@
   ],
   "route": {
     "rules": [
+      {
+        "inbound": [
+          "trojanIn"
+        ],
+        "outbound": "freedom"
+      },
       {
         "protocol": "dns",
         "outbound": "dns-out"
