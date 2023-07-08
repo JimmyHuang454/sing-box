@@ -19,6 +19,8 @@ jobs:
 
       - name: Setup Android SDK
         uses: amyu/setup-android@v2
+        with:
+          ndk-version: '23.1.7779620'
 
       - name: Setup Go
         uses: actions/setup-go@v4
