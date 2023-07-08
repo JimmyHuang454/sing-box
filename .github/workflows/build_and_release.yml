@@ -29,4 +29,6 @@ jobs:
 
       - run: make release_install
       - run: make release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: ls
