@@ -20,7 +20,7 @@
         "server_name": "www.visa.cn",
         "jls": {
           "enabled": true,
-          "random": "123456",
+          "random": "abcabc",
           "password": "123456"
         }
       },
