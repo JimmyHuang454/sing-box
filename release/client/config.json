@@ -51,7 +51,7 @@
   ],
   "route": {
     "geoip": {
-      "path": "./geoip.db"
+      "path": "./geoip-cn.db"
     },
     "rules": [
       {
