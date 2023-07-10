@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# bash <(curl https://raw.githubusercontent.com/JimmyHuang454/sing-box/dev-next/release/server/quic_install.sh)
 quit(){
   echo ""
   echo "Failed:"
