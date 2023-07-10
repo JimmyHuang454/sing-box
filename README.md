@@ -11,20 +11,31 @@ https://sing-box.sagernet.org
 ## 快速上手 JLS
 
 ### Server
-假设使用 Ubuntu 系统 x64 架构，到 [下载页面](https://github.com/JimmyHuang454/sing-box/releases) 下载最新版的 Linux 安装包：
+假设使用 Ubuntu 系统 x64 架构，一条代码快速安装（要求有 apt 或 yum）：
 ```bash
-# 下载最新安装包
-wget https://github.com/JimmyHuang454/sing-box/releases/latest/download/sing-box-linux-amd64.deb
-
-# 安装
-apt install ./sing-box-linux-amd64.deb
-
-# 必须修改密码
-vi /etc/sing-box/config.json
-
-# 最后运行
-systemctl start sing-box
+bash <(curl https://raw.githubusercontent.com/JimmyHuang454/sing-box/dev-next/release/server/quic_install.sh)
 ```
+
+安装成功后，会得到一串密码和随机数，端口默认443。
+
+类似这样，记得保存好。
+```bash
+....
+password: 123124293489023745908237
+random: 123124293489023745908237
+.....
+```
+
+查看sing-box状态：
+```bash
+systemctl status sing-box
+```
+
+停止运行：
+```bash
+systemctl stop sing-box
+```
+
 
 ### Client
 
@@ -54,7 +65,7 @@ systemctl start sing-box
 ```bash
 ./sing-box run --config "./config.json"
 ```
-默认HTTP代理端口为8080，设置好本机代理即可使用
+默认HTTP代理端口为8088，设置好本机代理即可使用
 
 ### 推荐伪装站
 端口统一为 443；可以为任意网站，可以设置成一些官方政府网站或已备案网站，可能处在白名单列表中，不会影响安全性，用户数据不会发送到伪装站。
