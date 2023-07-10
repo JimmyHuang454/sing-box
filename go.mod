@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	berty.tech/go-libtor v1.0.385
-	github.com/Dreamacro/clash v1.16.0
+	github.com/Dreamacro/clash v1.17.0
 	github.com/caddyserver/certmagic v0.18.2
 	github.com/cretz/bine v0.2.0
 	github.com/dustin/go-humanize v1.0.1
@@ -25,7 +25,7 @@ require (
 	github.com/sagernet/gvisor v0.0.0-20230627031050-1ab0276e0dd2
 	github.com/sagernet/quic-go v0.0.0-20230615020047-10f05c797c02
 	github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691
-	github.com/sagernet/sing v0.2.8-0.20230703002104-c68251b6d059
+	github.com/sagernet/sing v0.2.8-0.20230707055657-7c9b4d624da7
 	github.com/sagernet/sing-dns v0.1.7-0.20230703131656-fd65b6178bf9
 	github.com/sagernet/sing-mux v0.1.1-0.20230703132253-2cedde0fbc90
 	github.com/sagernet/sing-shadowsocks v0.2.3-0.20230703131347-b044960bd355
@@ -44,18 +44,18 @@ require (
 	go.uber.org/zap v1.24.0
 	go4.org/netipx v0.0.0-20230303233057-f1b76eb4bb35
 	golang.org/x/crypto v0.11.0
-	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
-	golang.org/x/net v0.11.0
+	golang.org/x/exp v0.0.0-20230626212559-97b1e661b5df
+	golang.org/x/net v0.12.0
 	golang.org/x/sys v0.10.0
 	golang.zx2c4.com/wireguard/wgctrl v0.0.0-20230429144221-925a1e7659e6
-	google.golang.org/grpc v1.56.1
-	google.golang.org/protobuf v1.30.0
+	google.golang.org/grpc v1.56.2
+	google.golang.org/protobuf v1.31.0
 )
 
 //replace github.com/sagernet/sing => ../sing
 
 require (
-	github.com/Dreamacro/protobytes v0.0.0-20230324064118-87bc784139cd // indirect
+	github.com/Dreamacro/protobytes v0.0.0-20230617041236-6500a9f4f158 // indirect
 	github.com/JimmyHuang454/JLS-go v0.0.0-20230707174703-b3a94921007c // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
