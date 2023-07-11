@@ -118,7 +118,6 @@ nfpms:
     contents:
       - src: release/server/config.json
         dst: /etc/sing-box/config.json
-        type: config
       - src: release/server/sing-box.service
         dst: /etc/systemd/system/sing-box.service
       - src: release/server/sing-box@.service

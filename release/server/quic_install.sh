@@ -36,24 +36,27 @@ download_lastest_singbox_to() {
 
 
 SAVE_PATH="./$ARCH_NAME"
+CONFIG_PATH="/etc/sing-box/config.json"
+PASSWORD="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"
+IV="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"
 
 sudo systemctl stop sing-box
 
 download_lastest_singbox_to $SAVE_PATH
 
 if InstallType=="deb"; then
+  sudo apt remove sing-box
   if ! sudo apt install $SAVE_PATH; then
     quit "Failed to install by apt."
   fi
 else
+  sudo yum remove sing-box
   if ! sudo yum localinstall $SAVE_PATH; then
     quit "Failed to install by yum."
   fi
 fi
 
-CONFIG_PATH="/etc/sing-box/config.json"
-PASSWORD="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"
-IV="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"
+
 
 if ! sed -i "s/123456/$PASSWORD/" $CONFIG_PATH; then
   quit "Failed to generate password and random number."
