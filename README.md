@@ -76,6 +76,7 @@ systemctl stop sing-box
 maven.apache.org # 泛播 Fastly
 www.g2.com # cloudflare
 www.legco.gov.hk # 香港
+news.gov.hk
 www.gov.hk # 香港
 www.hangseng.com # 东京
 weibo.cn # 大陆
