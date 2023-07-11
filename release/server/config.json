@@ -20,8 +20,8 @@
         "server_name": "www.visa.cn",
         "jls": {
           "enabled": true,
-          "random": "abcabc",
-          "password": "123456"
+          "password": "123456",
+          "random": "abcabc"
         }
       },
       "users": [
