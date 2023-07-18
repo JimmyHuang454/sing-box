@@ -3,37 +3,30 @@
     "level": "fatal"
   },
   "dns": {
-    "servers": [
-      {
-        "address": "udp://8.8.8.8"
-      }
-    ]
+    "servers": [{
+      "address": "udp://8.8.8.8"
+    }]
   },
-  "inbounds": [
-    {
-      "type": "trojan",
-      "listen": "0.0.0.0",
-      "tag": "trojanIn",
-      "listen_port": 443,
-      "tls": {
+  "inbounds": [{
+    "type": "trojan",
+    "listen": "0.0.0.0",
+    "tag": "trojanIn",
+    "listen_port": 443,
+    "tls": {
+      "enabled": true,
+      "server_name": "www.weibo.cn",
+      "jls": {
         "enabled": true,
-        "server_name": "www.visa.cn",
-        "jls": {
-          "enabled": true,
-          "password": "123456",
-          "random": "abcabc"
-        }
-      },
-      "users": [
-        {
-          "name": "abcd",
-          "password": "abcd"
-        }
-      ]
-    }
-  ],
-  "outbounds": [
-    {
+        "password": "123456",
+        "random": "abcabc"
+      }
+    },
+    "users": [{
+      "name": "abcd",
+      "password": "abcd"
+    }]
+  }],
+  "outbounds": [{
       "type": "direct",
       "tag": "freedom"
     },
@@ -43,8 +36,8 @@
     }
   ],
   "route": {
-    "rules": [
-      {
+    "auto_detect_interface": true,
+    "rules": [{
         "inbound": [
           "trojanIn"
         ],
