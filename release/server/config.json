@@ -14,7 +14,7 @@
     "listen_port": 443,
     "tls": {
       "enabled": true,
-      "server_name": "www.weibo.cn",
+      "server_name": "www.gov.hk",
       "jls": {
         "enabled": true,
         "password": "123456",
