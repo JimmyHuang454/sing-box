@@ -8,6 +8,8 @@ github.com/JimmyHuang454/JLS-go v0.0.0-20230707174703-b3a94921007c h1:8MET4jXikm
 github.com/JimmyHuang454/JLS-go v0.0.0-20230707174703-b3a94921007c/go.mod h1:bGr1SeIj/BwLkx2+p1kbaCPf6OJnGJImqcv9fYg6oII=
 github.com/JimmyHuang454/JLS-go v0.0.0-20230725220903-504df3697b3d h1:kjW1D7nDOsaotTNvSXbFuuQq7zlZrzs513m4hxkOeNY=
 github.com/JimmyHuang454/JLS-go v0.0.0-20230725220903-504df3697b3d/go.mod h1:bGr1SeIj/BwLkx2+p1kbaCPf6OJnGJImqcv9fYg6oII=
+github.com/JimmyHuang454/JLS-go v0.0.0-20230726133629-8c5423c78b9b h1:Di2II1BMGKLkYdr28ztqs+ulAv3wyFV2jhV4t29Cz8w=
+github.com/JimmyHuang454/JLS-go v0.0.0-20230726133629-8c5423c78b9b/go.mod h1:bGr1SeIj/BwLkx2+p1kbaCPf6OJnGJImqcv9fYg6oII=
 github.com/ajg/form v1.5.1 h1:t9c7v8JUKu/XxOGBU0yjNpaMloxGEJhUkqFRq0ibGeU=
 github.com/ajg/form v1.5.1/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
 github.com/andybalholm/brotli v1.0.5 h1:8uQZIdzKmjc/iuPu7O2ioW48L81FgatrcpfFmiq/cCs=
