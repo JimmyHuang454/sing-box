@@ -138,7 +138,7 @@ func create() (*box.Box, context.CancelFunc, error) {
 	}
 
 	osSignals := make(chan os.Signal, 1)
-	signal.Notify(osSignals, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT)
+	signal.Notify(osSignals, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGKILL)
 	defer func() {
 		signal.Stop(osSignals)
 		close(osSignals)
@@ -160,7 +160,7 @@ func create() (*box.Box, context.CancelFunc, error) {
 
 func run() error {
 	osSignals := make(chan os.Signal, 1)
-	signal.Notify(osSignals, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT)
+	signal.Notify(osSignals, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGKILL)
 	defer signal.Stop(osSignals)
 	for {
 		instance, cancel, err := create()
