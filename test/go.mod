@@ -10,13 +10,13 @@ require (
 	github.com/docker/docker v20.10.18+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/gofrs/uuid/v5 v5.0.0
-	github.com/sagernet/sing v0.2.10-0.20230731010140-26d3f3d91bda
+	github.com/sagernet/sing v0.2.10-0.20230802105922-c6a69b4912ee
 	github.com/sagernet/sing-shadowsocks v0.2.4
 	github.com/sagernet/sing-shadowsocks2 v0.1.3
 	github.com/spyzhov/ajson v0.7.1
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/goleak v1.2.0
-	golang.org/x/net v0.12.0
+	golang.org/x/net v0.13.0
 )
 
 require (
@@ -74,7 +74,7 @@ require (
 	github.com/sagernet/quic-go v0.0.0-20230731012313-1327e4015111 // indirect
 	github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691 // indirect
 	github.com/sagernet/sing-dns v0.1.9-0.20230731012726-ad50da89b659 // indirect
-	github.com/sagernet/sing-mux v0.1.2 // indirect
+	github.com/sagernet/sing-mux v0.1.3-0.20230803070305-ea4a972acd21 // indirect
 	github.com/sagernet/sing-shadowtls v0.1.4 // indirect
 	github.com/sagernet/sing-tun v0.1.11 // indirect
 	github.com/sagernet/sing-vmess v0.1.7 // indirect
