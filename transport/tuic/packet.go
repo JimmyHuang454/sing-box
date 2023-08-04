@@ -1,6 +1,7 @@
 package tuic
 
 import (
+	"bytes"
 	"context"
 	"encoding/binary"
 	"errors"
@@ -422,7 +423,7 @@ func newPacketItem() *packetItem {
 	return new(packetItem)
 }
 
-func decodeUDPMessage(message *udpMessage, reader io.Reader) error {
+func readUDPMessage(message *udpMessage, reader io.Reader) error {
 	err := binary.Read(reader, binary.BigEndian, &message.sessionID)
 	if err != nil {
 		return err
@@ -452,5 +453,38 @@ func decodeUDPMessage(message *udpMessage, reader io.Reader) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func decodeUDPMessage(message *udpMessage, data []byte) error {
+	reader := bytes.NewReader(data)
+	err := binary.Read(reader, binary.BigEndian, &message.sessionID)
+	if err != nil {
+		return err
+	}
+	err = binary.Read(reader, binary.BigEndian, &message.packetID)
+	if err != nil {
+		return err
+	}
+	err = binary.Read(reader, binary.BigEndian, &message.fragmentTotal)
+	if err != nil {
+		return err
+	}
+	err = binary.Read(reader, binary.BigEndian, &message.fragmentID)
+	if err != nil {
+		return err
+	}
+	err = binary.Read(reader, binary.BigEndian, &message.dataLength)
+	if err != nil {
+		return err
+	}
+	message.destination, err = addressSerializer.ReadAddrPort(reader)
+	if err != nil {
+		return err
+	}
+	if reader.Len() != int(message.dataLength) {
+		return io.ErrUnexpectedEOF
+	}
+	message.data = buf.As(data[len(data)-reader.Len():])
 	return nil
 }

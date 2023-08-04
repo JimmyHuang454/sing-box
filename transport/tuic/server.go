@@ -275,7 +275,7 @@ func (s *serverSession) handleUniStream(stream quic.ReceiveStream) error {
 		case <-s.authDone:
 		}
 		message := udpMessagePool.Get().(*udpMessage)
-		err = decodeUDPMessage(message, io.MultiReader(bytes.NewReader(buffer.From(2)), stream))
+		err = readUDPMessage(message, io.MultiReader(bytes.NewReader(buffer.From(2)), stream))
 		if err != nil {
 			message.release()
 			return err

@@ -1,8 +1,6 @@
 package tuic
 
 import (
-	"bytes"
-
 	"github.com/sagernet/sing/common"
 	E "github.com/sagernet/sing/common/exceptions"
 	M "github.com/sagernet/sing/common/metadata"
@@ -38,7 +36,7 @@ func (s *serverSession) handleMessage(data []byte) error {
 	switch data[1] {
 	case CommandPacket:
 		message := udpMessagePool.Get().(*udpMessage)
-		err := decodeUDPMessage(message, bytes.NewReader(data[2:]))
+		err := decodeUDPMessage(message, data[2:])
 		if err != nil {
 			message.release()
 			return E.Cause(err, "decode UDP message")

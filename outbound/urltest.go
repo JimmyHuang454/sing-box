@@ -266,7 +266,9 @@ func (g *URLTestGroup) Fallback(used adapter.Outbound) []adapter.Outbound {
 func (g *URLTestGroup) loopCheck() {
 	go g.CheckOutbounds(true)
 	for {
-		<-g.sleepManager.Active()
+		if g.sleepManager != nil {
+			<-g.sleepManager.Active()
+		}
 		select {
 		case <-g.close:
 			return

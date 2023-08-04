@@ -1,7 +1,6 @@
 package tuic
 
 import (
-	"bytes"
 	"io"
 
 	"github.com/sagernet/quic-go"
@@ -36,7 +35,7 @@ func (c *Client) handleMessage(conn *clientQUICConnection, data []byte) error {
 	switch data[1] {
 	case CommandPacket:
 		message := udpMessagePool.Get().(*udpMessage)
-		err := decodeUDPMessage(message, bytes.NewReader(data[2:]))
+		err := decodeUDPMessage(message, data[2:])
 		if err != nil {
 			message.release()
 			return E.Cause(err, "decode UDP message")
@@ -84,7 +83,7 @@ func (c *Client) handleUniStream(conn *clientQUICConnection, stream quic.Receive
 	}
 	reader := io.MultiReader(bufio.NewCachedReader(stream, buffer), stream)
 	message := udpMessagePool.Get().(*udpMessage)
-	err = decodeUDPMessage(message, reader)
+	err = readUDPMessage(message, reader)
 	if err != nil {
 		message.release()
 		return err
