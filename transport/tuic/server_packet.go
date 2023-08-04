@@ -2,7 +2,6 @@ package tuic
 
 import (
 	"bytes"
-	"encoding/binary"
 
 	"github.com/sagernet/sing/common"
 	E "github.com/sagernet/sing/common/exceptions"
@@ -21,12 +20,11 @@ func (s *serverSession) loopMessages() {
 			s.closeWithError(E.Cause(err, "receive message"))
 			return
 		}
-		go func() {
-			hErr := s.handleMessage(message)
-			if hErr != nil {
-				s.closeWithError(E.Cause(hErr, "handle message"))
-			}
-		}()
+		hErr := s.handleMessage(message)
+		if hErr != nil {
+			s.closeWithError(E.Cause(hErr, "handle message"))
+			return
+		}
 	}
 }
 
@@ -47,21 +45,6 @@ func (s *serverSession) handleMessage(data []byte) error {
 		}
 		s.handleUDPMessage(message, false)
 		return nil
-	case CommandDissociate:
-		if len(data) != 4 {
-			return E.New("invalid dissociate message")
-		}
-		sessionID := binary.BigEndian.Uint16(data[2:])
-		s.udpAccess.RLock()
-		udpConn, loaded := s.udpConnMap[sessionID]
-		s.udpAccess.RUnlock()
-		if loaded {
-			udpConn.closeWithError(E.New("remote closed"))
-			s.udpAccess.Lock()
-			delete(s.udpConnMap, sessionID)
-			s.udpAccess.Unlock()
-		}
-		return nil
 	case CommandHeartbeat:
 		return nil
 	default:
@@ -74,30 +57,15 @@ func (s *serverSession) handleUDPMessage(message *udpMessage, udpStream bool) {
 	udpConn, loaded := s.udpConnMap[message.sessionID]
 	s.udpAccess.RUnlock()
 	if !loaded || common.Done(udpConn.ctx) {
-		ctx, cancel := common.ContextWithCancelCause(s.ctx)
-		udpConn = &udpPacketConn{
-			ctx:       ctx,
-			cancel:    cancel,
-			connId:    message.sessionID,
-			quicConn:  s.quicConn,
-			data:      make(chan *udpMessage, 64),
-			udpStream: udpStream,
-			isServer:  true,
-		}
+		udpConn = newUDPPacketConn(s.ctx, s.quicConn, udpStream, true)
+		udpConn.connId = message.sessionID
 		s.udpAccess.Lock()
 		s.udpConnMap[message.sessionID] = udpConn
 		s.udpAccess.Unlock()
-		go s.handler.NewPacketConnection(ctx, udpConn, M.Metadata{
+		go s.handler.NewPacketConnection(udpConn.ctx, udpConn, M.Metadata{
 			Source:      s.source,
 			Destination: message.destination,
 		})
 	}
-	if message.fragmentTotal <= 1 {
-		udpConn.data <- message
-	} else {
-		newMessage := s.defragger.feed(message)
-		if newMessage != nil {
-			udpConn.data <- newMessage
-		}
-	}
+	udpConn.inputPacket(message)
 }
