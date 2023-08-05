@@ -37,7 +37,7 @@ func (h Outbound) MarshalJSON() ([]byte, error) {
 		v = h.DirectOptions
 	case C.TypeBlock, C.TypeDNS:
 		v = nil
-	case C.TypeSocks:
+	case C.TypeSOCKS:
 		v = h.SocksOptions
 	case C.TypeHTTP:
 		v = h.HTTPOptions
@@ -84,7 +84,7 @@ func (h *Outbound) UnmarshalJSON(bytes []byte) error {
 		v = &h.DirectOptions
 	case C.TypeBlock, C.TypeDNS:
 		v = nil
-	case C.TypeSocks:
+	case C.TypeSOCKS:
 		v = &h.SocksOptions
 	case C.TypeHTTP:
 		v = &h.HTTPOptions
