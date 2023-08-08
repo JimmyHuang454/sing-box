@@ -4,10 +4,6 @@ import (
 	"context"
 	"crypto/tls"
 	"io"
-<<<<<<< HEAD
-	"math/rand"
-=======
->>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 	"net"
 	"os"
 	"runtime"
@@ -61,11 +57,7 @@ func NewClient(options ClientOptions) (*Client, error) {
 		options.Heartbeat = 10 * time.Second
 	}
 	quicConfig := &quic.Config{
-<<<<<<< HEAD
-		DisablePathMTUDiscovery: !(runtime.GOOS == "windows" || runtime.GOOS == "linux" || runtime.GOOS == "android"),
-=======
 		DisablePathMTUDiscovery: !(runtime.GOOS == "windows" || runtime.GOOS == "linux" || runtime.GOOS == "android" || runtime.GOOS == "darwin"),
->>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 		MaxDatagramFrameSize:    1400,
 		EnableDatagrams:         true,
 	}
@@ -202,19 +194,6 @@ func (c *Client) ListenPacket(ctx context.Context) (net.PacketConn, error) {
 	if err != nil {
 		return nil, err
 	}
-<<<<<<< HEAD
-	clientPacketConn := newUDPPacketConn(ctx, conn.quicConn, c.udpStream, false)
-	conn.udpAccess.Lock()
-	for {
-		connId := uint16(rand.Uint32())
-		if _, exists := conn.udpConnMap[connId]; !exists {
-			clientPacketConn.connId = connId
-			conn.udpConnMap[connId] = clientPacketConn
-			break
-		}
-	}
-	conn.udpAccess.Unlock()
-=======
 	var sessionID uint16
 	clientPacketConn := newUDPPacketConn(ctx, conn.quicConn, c.udpStream, false, func() {
 		conn.udpAccess.Lock()
@@ -227,7 +206,6 @@ func (c *Client) ListenPacket(ctx context.Context) (net.PacketConn, error) {
 	conn.udpConnMap[sessionID] = clientPacketConn
 	conn.udpAccess.Unlock()
 	clientPacketConn.sessionID = sessionID
->>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 	return clientPacketConn, nil
 }
 
@@ -240,15 +218,6 @@ func (c *Client) CloseWithError(err error) error {
 }
 
 type clientQUICConnection struct {
-<<<<<<< HEAD
-	quicConn   quic.Connection
-	rawConn    io.Closer
-	access     sync.Mutex
-	connDone   chan struct{}
-	connErr    error
-	udpAccess  sync.RWMutex
-	udpConnMap map[uint16]*udpPacketConn
-=======
 	quicConn     quic.Connection
 	rawConn      io.Closer
 	closeOnce    sync.Once
@@ -257,7 +226,6 @@ type clientQUICConnection struct {
 	udpAccess    sync.RWMutex
 	udpConnMap   map[uint16]*udpPacketConn
 	udpSessionID uint16
->>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 }
 
 func (c *clientQUICConnection) active() bool {
@@ -266,11 +234,6 @@ func (c *clientQUICConnection) active() bool {
 		return false
 	default:
 	}
-<<<<<<< HEAD
-	c.access.Lock()
-	defer c.access.Unlock()
-=======
->>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 	select {
 	case <-c.connDone:
 		return false
@@ -279,43 +242,12 @@ func (c *clientQUICConnection) active() bool {
 	return true
 }
 
-<<<<<<< HEAD
-func (c *clientQUICConnection) handleUDPMessage(message *udpMessage) {
-	c.udpAccess.RLock()
-	udpConn, loaded := c.udpConnMap[message.sessionID]
-	c.udpAccess.RUnlock()
-	if !loaded {
-		message.releaseMessage()
-		return
-	}
-	select {
-	case <-udpConn.ctx.Done():
-		message.releaseMessage()
-		return
-	default:
-	}
-	udpConn.inputPacket(message)
-}
-
-func (c *clientQUICConnection) closeWithError(err error) {
-	c.access.Lock()
-	defer c.access.Unlock()
-	select {
-	case <-c.connDone:
-		return
-	default:
-	}
-	c.connErr = err
-	close(c.connDone)
-	_ = c.quicConn.CloseWithError(0, "")
-=======
 func (c *clientQUICConnection) closeWithError(err error) {
 	c.closeOnce.Do(func() {
 		c.connErr = err
 		close(c.connDone)
 		_ = c.quicConn.CloseWithError(0, "")
 	})
->>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 }
 
 type clientConn struct {

@@ -91,8 +91,6 @@ func (c *Client) handleUniStream(conn *clientQUICConnection, stream quic.Receive
 	conn.handleUDPMessage(message)
 	return nil
 }
-<<<<<<< HEAD
-=======
 
 func (c *clientQUICConnection) handleUDPMessage(message *udpMessage) {
 	c.udpAccess.RLock()
@@ -110,4 +108,3 @@ func (c *clientQUICConnection) handleUDPMessage(message *udpMessage) {
 	}
 	udpConn.inputPacket(message)
 }
->>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
