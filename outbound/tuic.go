@@ -114,13 +114,8 @@ func (h *TUIC) NewPacketConnection(ctx context.Context, conn N.PacketConn, metad
 	return NewPacketConnection(ctx, h, conn, metadata)
 }
 
-<<<<<<< HEAD
-func (h *TUIC) InterfaceUpdated() error {
-	return h.client.CloseWithError(E.New("network changed"))
-=======
 func (h *TUIC) InterfaceUpdated() {
 	_ = h.client.CloseWithError(E.New("network changed"))
->>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 }
 
 func (h *TUIC) Close() error {

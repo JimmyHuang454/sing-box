@@ -10,22 +10,13 @@ require (
 	github.com/docker/docker v24.0.5+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/gofrs/uuid/v5 v5.0.0
-<<<<<<< HEAD
-	github.com/sagernet/sing v0.2.10-0.20230802114159-a755de3bbd49
-=======
 	github.com/sagernet/sing v0.2.10-0.20230807080248-4db0062caa0a
->>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 	github.com/sagernet/sing-shadowsocks v0.2.4
 	github.com/sagernet/sing-shadowsocks2 v0.1.3
 	github.com/spyzhov/ajson v0.9.0
 	github.com/stretchr/testify v1.8.4
-<<<<<<< HEAD
-	go.uber.org/goleak v1.2.1
-	golang.org/x/net v0.13.0
-=======
 	go.uber.org/goleak v1.2.0
 	golang.org/x/net v0.14.0
->>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 )
 
 require (
