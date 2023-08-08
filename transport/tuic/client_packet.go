@@ -91,3 +91,23 @@ func (c *Client) handleUniStream(conn *clientQUICConnection, stream quic.Receive
 	conn.handleUDPMessage(message)
 	return nil
 }
+<<<<<<< HEAD
+=======
+
+func (c *clientQUICConnection) handleUDPMessage(message *udpMessage) {
+	c.udpAccess.RLock()
+	udpConn, loaded := c.udpConnMap[message.sessionID]
+	c.udpAccess.RUnlock()
+	if !loaded {
+		message.releaseMessage()
+		return
+	}
+	select {
+	case <-udpConn.ctx.Done():
+		message.releaseMessage()
+		return
+	default:
+	}
+	udpConn.inputPacket(message)
+}
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a

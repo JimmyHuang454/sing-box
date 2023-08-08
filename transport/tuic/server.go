@@ -71,7 +71,11 @@ func NewServer(options ServerOptions) (*Server, error) {
 		options.Heartbeat = 10 * time.Second
 	}
 	quicConfig := &quic.Config{
+<<<<<<< HEAD
 		DisablePathMTUDiscovery: !(runtime.GOOS == "windows" || runtime.GOOS == "linux" || runtime.GOOS == "android"),
+=======
+		DisablePathMTUDiscovery: !(runtime.GOOS == "windows" || runtime.GOOS == "linux" || runtime.GOOS == "android" || runtime.GOOS == "darwin"),
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 		MaxDatagramFrameSize:    1400,
 		EnableDatagrams:         true,
 		Allow0RTT:               options.ZeroRTTHandshake,
@@ -156,6 +160,7 @@ func (s *Server) Close() error {
 	)
 }
 
+<<<<<<< HEAD
 func (s *Server) loopConnections(listener *quic.Listener) error {
 	for {
 		connection, err := listener.Accept(s.ctx)
@@ -166,6 +171,8 @@ func (s *Server) loopConnections(listener *quic.Listener) error {
 	}
 }
 
+=======
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 func (s *Server) handleConnection(connection quic.Connection) {
 	setCongestion(s.ctx, connection, s.congestionControl)
 	session := &serverSession{
@@ -322,13 +329,24 @@ func (s *serverSession) handleAuthTimeout() {
 
 func (s *serverSession) loopStreams() {
 	for {
+<<<<<<< HEAD
 		uniStream, err := s.quicConn.AcceptStream(s.ctx)
+=======
+		stream, err := s.quicConn.AcceptStream(s.ctx)
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 		if err != nil {
 			return
 		}
 		go func() {
+<<<<<<< HEAD
 			err = s.handleStream(uniStream)
 			if err != nil {
+=======
+			err = s.handleStream(stream)
+			if err != nil {
+				stream.CancelRead(0)
+				stream.Close()
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 				s.logger.Error(E.Cause(err, "handle stream request"))
 			}
 		}()

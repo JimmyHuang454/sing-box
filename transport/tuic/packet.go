@@ -108,7 +108,11 @@ func fragUDPMessage(message *udpMessage, maxPacketSize int) []*udpMessage {
 type udpPacketConn struct {
 	ctx       context.Context
 	cancel    common.ContextCancelCauseFunc
+<<<<<<< HEAD
 	connId    uint16
+=======
+	sessionID uint16
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 	quicConn  quic.Connection
 	data      chan *udpMessage
 	udpStream bool
@@ -117,9 +121,16 @@ type udpPacketConn struct {
 	closeOnce sync.Once
 	isServer  bool
 	defragger *udpDefragger
+<<<<<<< HEAD
 }
 
 func newUDPPacketConn(ctx context.Context, quicConn quic.Connection, udpStream bool, isServer bool) *udpPacketConn {
+=======
+	onDestroy func()
+}
+
+func newUDPPacketConn(ctx context.Context, quicConn quic.Connection, udpStream bool, isServer bool, onDestroy func()) *udpPacketConn {
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 	ctx, cancel := common.ContextWithCancelCause(ctx)
 	return &udpPacketConn{
 		ctx:       ctx,
@@ -129,6 +140,10 @@ func newUDPPacketConn(ctx context.Context, quicConn quic.Connection, udpStream b
 		udpStream: udpStream,
 		isServer:  isServer,
 		defragger: newUDPDefragger(),
+<<<<<<< HEAD
+=======
+		onDestroy: onDestroy,
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 	}
 }
 
@@ -172,7 +187,15 @@ func (c *udpPacketConn) ReadFrom(p []byte) (n int, addr net.Addr, err error) {
 	select {
 	case pkt := <-c.data:
 		n = copy(p, pkt.data.Bytes())
+<<<<<<< HEAD
 		addr = pkt.destination.UDPAddr()
+=======
+		if pkt.destination.IsFqdn() {
+			addr = pkt.destination
+		} else {
+			addr = pkt.destination.UDPAddr()
+		}
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 		pkt.releaseMessage()
 		return n, addr, nil
 	case <-c.ctx.Done():
@@ -197,7 +220,11 @@ func (c *udpPacketConn) WritePacket(buffer *buf.Buffer, destination M.Socksaddr)
 	}
 	message := udpMessagePool.Get().(*udpMessage)
 	*message = udpMessage{
+<<<<<<< HEAD
 		sessionID:     c.connId,
+=======
+		sessionID:     c.sessionID,
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 		packetID:      uint16(packetId),
 		fragmentTotal: 1,
 		destination:   destination,
@@ -237,7 +264,11 @@ func (c *udpPacketConn) WriteTo(p []byte, addr net.Addr) (n int, err error) {
 	}
 	message := udpMessagePool.Get().(*udpMessage)
 	*message = udpMessage{
+<<<<<<< HEAD
 		sessionID:     c.connId,
+=======
+		sessionID:     c.sessionID,
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 		packetID:      uint16(packetId),
 		fragmentTotal: 1,
 		destination:   M.SocksaddrFromNet(addr),
@@ -321,6 +352,10 @@ func (c *udpPacketConn) writePacket(message *udpMessage) error {
 func (c *udpPacketConn) Close() error {
 	c.closeOnce.Do(func() {
 		c.closeWithError(os.ErrClosed)
+<<<<<<< HEAD
+=======
+		c.onDestroy()
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 	})
 	return nil
 }
@@ -332,7 +367,11 @@ func (c *udpPacketConn) closeWithError(err error) {
 		defer buffer.Release()
 		buffer.WriteByte(Version)
 		buffer.WriteByte(CommandDissociate)
+<<<<<<< HEAD
 		binary.Write(buffer, binary.BigEndian, c.connId)
+=======
+		binary.Write(buffer, binary.BigEndian, c.sessionID)
+>>>>>>> 0762b71852a168005a3f133e42dc095278fc607a
 		sendStream, openErr := c.quicConn.OpenUniStream()
 		if openErr != nil {
 			return

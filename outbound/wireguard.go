@@ -166,7 +166,7 @@ func NewWireGuard(ctx context.Context, router adapter.Router, logger log.Context
 	if err != nil {
 		return nil, E.Cause(err, "create WireGuard device")
 	}
-	wgDevice := device.NewDevice(wireTunDevice, outbound.bind, &device.Logger{
+	wgDevice := device.NewDevice(ctx, wireTunDevice, outbound.bind, &device.Logger{
 		Verbosef: func(format string, args ...interface{}) {
 			logger.Debug(fmt.Sprintf(strings.ToLower(format), args...))
 		},
@@ -186,9 +186,9 @@ func NewWireGuard(ctx context.Context, router adapter.Router, logger log.Context
 	return outbound, nil
 }
 
-func (w *WireGuard) InterfaceUpdated() error {
+func (w *WireGuard) InterfaceUpdated() {
 	w.bind.Reset()
-	return nil
+	return
 }
 
 func (w *WireGuard) DialContext(ctx context.Context, network string, destination M.Socksaddr) (net.Conn, error) {
