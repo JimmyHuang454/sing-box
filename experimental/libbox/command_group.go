@@ -27,14 +27,14 @@ func (g *OutboundGroup) GetItems() OutboundGroupItemIterator {
 	return newIterator(g.items)
 }
 
-func (g *OutboundGroup) IsExpand(defaultValue bool) bool {
+func (g *OutboundGroup) IsExpand() bool {
 	switch g.isExpand {
 	case -1:
-		return defaultValue
+		return g.Selectable
 	case 0:
 		return false
 	case 1:
-		return false
+		return true
 	default:
 		panic("unexpected expand value")
 	}
