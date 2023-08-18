@@ -1,3 +1,7 @@
+#### 1.4.0-beta.5
+
+* Fixes and improvements
+
 #### 1.4.0-beta.4
 
 * Graphical clients: Persistence group expansion state
