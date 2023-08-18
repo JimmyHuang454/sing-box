@@ -16,20 +16,24 @@ jobs:
       - name: Set up JDK 1.8
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: "temurin"
+          java-version: "17"
 
       - name: Setup Android SDK
         uses: amyu/setup-android@v2
         with:
-          ndk-version: '23.1.7779620'
+          ndk-version: "23.1.7779620"
 
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
           go-version: 1.20.1
 
-      - run: make release_install
+      - uses: goreleaser/goreleaser-action@v4
+        with:
+          install-only: true
+      - run: go install -v github.com/tcnksm/ghr@latest
+
       - run: make release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
