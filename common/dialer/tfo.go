@@ -63,6 +63,7 @@ func (c *slowOpenConn) Write(b []byte) (n int, err error) {
 	if c.conn == nil {
 		c.conn, err = c.dialer.DialContext(c.ctx, c.network, c.destination.String(), b)
 		if err != nil {
+			c.conn = nil
 			c.err = E.Cause(err, "dial tcp fast open")
 		}
 		close(c.create)
