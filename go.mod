@@ -5,7 +5,7 @@ go 1.20
 require (
 	berty.tech/go-libtor v1.0.385
 	github.com/Dreamacro/clash v1.17.0
-	github.com/JimmyHuang454/JLS-go v0.0.0-20230728030240-16768995519e
+	github.com/JimmyHuang454/JLS-go v0.0.0-20230823155252-71a44c5008d6
 	github.com/caddyserver/certmagic v0.19.2
 	github.com/cretz/bine v0.2.0
 	github.com/dustin/go-humanize v1.0.1
@@ -24,7 +24,7 @@ require (
 	github.com/sagernet/cloudflare-tls v0.0.0-20221031050923-d70792f4c3a0
 	github.com/sagernet/gomobile v0.0.0-20230728014906-3de089147f59
 	github.com/sagernet/gvisor v0.0.0-20230627031050-1ab0276e0dd2
-	github.com/sagernet/quic-go v0.0.0-20230822044404-01fde49063e4
+	github.com/sagernet/quic-go v0.0.0-20230824033040-30ef72e3be3e
 	github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691
 	github.com/sagernet/sing v0.2.10-0.20230821073500-620f3a3b882d
 	github.com/sagernet/sing-dns v0.1.9-0.20230731012726-ad50da89b659
