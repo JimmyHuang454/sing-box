@@ -35,7 +35,7 @@ func TestJLS(t *testing.T) {
 						},
 					},
 					TLS: &option.InboundTLSOptions{
-						Enabled:    false,
+						Enabled:    true,
 						ServerName: "example.org",
 						JLS:        &option.JLSOptions{Enabled: true, IV: "abc", Password: "abc"},
 					},
@@ -56,7 +56,7 @@ func TestJLS(t *testing.T) {
 					},
 					Password: "password",
 					TLS: &option.OutboundTLSOptions{
-						Enabled:    false,
+						Enabled:    true,
 						ServerName: "example.org",
 						JLS:        &option.JLSOptions{Enabled: true, IV: "abc", Password: "abc"},
 					},
