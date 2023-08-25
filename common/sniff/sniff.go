@@ -23,7 +23,9 @@ func PeekStream(ctx context.Context, conn net.Conn, buffer *buf.Buffer, timeout 
 		timeout = C.ReadPayloadTimeout
 	}
 	deadline := time.Now().Add(timeout)
-	for i := 0; ; i++ {
+	var errors []error
+
+	for i := 0; i < 3; i++ {
 		err := conn.SetReadDeadline(deadline)
 		if err != nil {
 			return nil, E.Cause(err, "set read deadline")
@@ -36,14 +38,13 @@ func PeekStream(ctx context.Context, conn net.Conn, buffer *buf.Buffer, timeout 
 			}
 			return nil, E.Cause(err, "read payload")
 		}
-	}
-	var errors []error
-	for _, sniffer := range sniffers {
-		metadata, err := sniffer(ctx, bytes.NewReader(buffer.Bytes()))
-		if metadata != nil {
-			return metadata, nil
+		for _, sniffer := range sniffers {
+			metadata, err := sniffer(ctx, bytes.NewReader(buffer.Bytes()))
+			if metadata != nil {
+				return metadata, nil
+			}
+			errors = append(errors, err)
 		}
-		errors = append(errors, err)
 	}
 	return nil, E.Errors(errors...)
 }
