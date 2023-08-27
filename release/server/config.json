@@ -12,7 +12,6 @@
     "listen": "0.0.0.0",
     "tag": "trojanIn",
     "listen_port": 443,
-    "network": "tcp",
     "tls": {
       "enabled": true,
       "server_name": "www.gov.hk",
