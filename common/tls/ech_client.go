@@ -7,9 +7,11 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/base64"
+	"encoding/pem"
 	"net"
 	"net/netip"
 	"os"
+	"strings"
 
 	cftls "github.com/sagernet/cloudflare-tls"
 	"github.com/sagernet/sing-box/adapter"
@@ -168,16 +170,16 @@ func NewECHClient(router adapter.Router, serverAddress string, options option.Ou
 	tlsConfig.ECHEnabled = true
 	tlsConfig.PQSignatureSchemesEnabled = options.ECH.PQSignatureSchemesEnabled
 	tlsConfig.DynamicRecordSizingDisabled = options.ECH.DynamicRecordSizingDisabled
-	if options.ECH.Config != "" {
-		clientConfigContent, err := base64.StdEncoding.DecodeString(options.ECH.Config)
-		if err != nil {
-			return nil, err
+	if len(options.ECH.Config) > 0 {
+		block, rest := pem.Decode([]byte(strings.Join(options.ECH.Config, "\n")))
+		if block == nil || block.Type != "ECH CONFIGS" || len(rest) > 0 {
+			return nil, E.New("invalid ECH configs pem")
 		}
-		clientConfig, err := cftls.UnmarshalECHConfigs(clientConfigContent)
+		echConfigs, err := cftls.UnmarshalECHConfigs(block.Bytes)
 		if err != nil {
-			return nil, err
+			return nil, E.Cause(err, "parse ECH configs")
 		}
-		tlsConfig.ClientECHConfigs = clientConfig
+		tlsConfig.ClientECHConfigs = echConfigs
 	} else {
 		tlsConfig.GetClientECHConfigs = fetchECHClientConfig(router)
 	}

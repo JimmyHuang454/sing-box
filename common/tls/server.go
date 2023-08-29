@@ -15,7 +15,9 @@ func NewServer(ctx context.Context, router adapter.Router, logger log.Logger, op
 	if !options.Enabled {
 		return nil, nil
 	}
-	if options.Reality != nil && options.Reality.Enabled {
+	if options.ECH != nil && options.ECH.Enabled {
+		return NewECHServer(ctx, router, logger, options)
+	} else if options.Reality != nil && options.Reality.Enabled {
 		return NewRealityServer(ctx, router, logger, options)
 	} else {
 		return NewSTDServer(ctx, router, logger, options)
