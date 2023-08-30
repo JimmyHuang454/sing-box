@@ -10,6 +10,7 @@ import (
 	"github.com/sagernet/sing-box/log"
 	"github.com/sagernet/sing-box/option"
 	E "github.com/sagernet/sing/common/exceptions"
+	"github.com/sagernet/sing/common/ntp"
 )
 
 var certPem = []byte(`-----BEGIN CERTIFICATE-----
@@ -79,9 +80,9 @@ func (c *JLSServerConfig) Close() error {
 	return nil
 }
 
-func NewJLSServer(ctx context.Context, router adapter.Router, logger log.Logger, options option.InboundTLSOptions) (ServerConfig, error) {
+func NewJLSServer(ctx context.Context, logger log.Logger, options option.InboundTLSOptions) (ServerConfig, error) {
 	tlsConfig := &JLS.Config{}
-	tlsConfig.Time = router.TimeFunc()
+	tlsConfig.Time = ntp.TimeFuncFromContext(ctx)
 
 	if options.ServerName == "" {
 		return nil, E.New("fallback website is needed.")

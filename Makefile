@@ -1,7 +1,7 @@
 NAME = sing-box
 COMMIT = $(shell git rev-parse --short HEAD)
 TAGS_GO118 = with_gvisor,with_dhcp,with_wireguard,with_utls,with_reality_server,with_clash_api,with_grpc
-TAGS_GO120 = with_quic
+TAGS_GO120 = with_quic,with_ech
 TAGS ?= $(TAGS_GO118),$(TAGS_GO120)
 TAGS_TEST ?= with_gvisor,with_quic,with_wireguard,with_grpc,with_ech,with_utls,with_reality_server,with_shadowsocksr
 TAGS ?= $(TAGS_GO118),$(TAGS_GO120)
@@ -70,12 +70,16 @@ release_install:
 	go install -v github.com/goreleaser/goreleaser@latest
 	go install -v github.com/tcnksm/ghr@latest
 
-upload_android:
+update_android_version:
 	go run ./cmd/internal/update_android_version
+
+upload_android:
 	cd ../sing-box-for-android && ./gradlew :app:assembleRelease
 	mkdir dist/release_android
 	cp ../sing-box-for-android/app/build/outputs/apk/release/*.apk dist/release_android
 	ghr --replace --draft --prerelease -p 3 "v${VERSION}" dist/release_android
+
+release_android: lib_android update_android_version upload_android
 
 publish_android:
 	cd ../sing-box-for-android && ./gradlew :app:appCenterAssembleAndUploadRelease
@@ -140,6 +144,10 @@ update_apple_version:
 	go run ./cmd/internal/update_apple_version
 
 release_apple: update_apple_version release_ios release_macos release_macos_independent release_tvos
+
+build_apple_beta: update_apple_version build_ios build_macos build_tvos
+
+upload_apple_beta: upload_ios_app_store upload_macos_app_store upload_tvos_app_store
 
 test:
 	@go test -v ./... && \

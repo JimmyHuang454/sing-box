@@ -1,12 +1,14 @@
 package tls
 
 import (
+	"context"
 	"net"
 
 	JLS "github.com/JimmyHuang454/JLS-go/tls"
 	"github.com/sagernet/sing-box/adapter"
 	"github.com/sagernet/sing-box/option"
 	E "github.com/sagernet/sing/common/exceptions"
+	"github.com/sagernet/sing/common/ntp"
 )
 
 type JLSClientConfig struct {
@@ -41,9 +43,9 @@ func (s *JLSClientConfig) Clone() Config {
 	return &JLSClientConfig{s.config.Clone()}
 }
 
-func NewJLSlient(router adapter.Router, serverAddress string, options option.OutboundTLSOptions) (Config, error) {
+func NewJLSlient(ctx context.Context, serverAddress string, options option.OutboundTLSOptions) (Config, error) {
 	tlsConfig := &JLS.Config{}
-	tlsConfig.Time = router.TimeFunc()
+	tlsConfig.Time = ntp.TimeFuncFromContext(ctx)
 
 	if options.ServerName == "" {
 		return nil, E.New("fallback website is needed.")

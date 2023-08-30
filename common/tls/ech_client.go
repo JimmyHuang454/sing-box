@@ -18,6 +18,7 @@ import (
 	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing-dns"
 	E "github.com/sagernet/sing/common/exceptions"
+	"github.com/sagernet/sing/common/ntp"
 
 	mDNS "github.com/miekg/dns"
 )
@@ -82,7 +83,7 @@ func (c *echConnWrapper) Upstream() any {
 	return c.Conn
 }
 
-func NewECHClient(router adapter.Router, serverAddress string, options option.OutboundTLSOptions) (Config, error) {
+func NewECHClient(ctx context.Context, serverAddress string, options option.OutboundTLSOptions) (Config, error) {
 	var serverName string
 	if options.ServerName != "" {
 		serverName = options.ServerName
@@ -96,7 +97,7 @@ func NewECHClient(router adapter.Router, serverAddress string, options option.Ou
 	}
 
 	var tlsConfig cftls.Config
-	tlsConfig.Time = router.TimeFunc()
+	tlsConfig.Time = ntp.TimeFuncFromContext(ctx)
 	if options.DisableSNI {
 		tlsConfig.ServerName = "127.0.0.1"
 	} else {
@@ -181,13 +182,13 @@ func NewECHClient(router adapter.Router, serverAddress string, options option.Ou
 		}
 		tlsConfig.ClientECHConfigs = echConfigs
 	} else {
-		tlsConfig.GetClientECHConfigs = fetchECHClientConfig(router)
+		tlsConfig.GetClientECHConfigs = fetchECHClientConfig(ctx)
 	}
 	return &ECHClientConfig{&tlsConfig}, nil
 }
 
-func fetchECHClientConfig(router adapter.Router) func(ctx context.Context, serverName string) ([]cftls.ECHConfig, error) {
-	return func(ctx context.Context, serverName string) ([]cftls.ECHConfig, error) {
+func fetchECHClientConfig(ctx context.Context) func(_ context.Context, serverName string) ([]cftls.ECHConfig, error) {
+	return func(_ context.Context, serverName string) ([]cftls.ECHConfig, error) {
 		message := &mDNS.Msg{
 			MsgHdr: mDNS.MsgHdr{
 				RecursionDesired: true,
@@ -200,7 +201,7 @@ func fetchECHClientConfig(router adapter.Router) func(ctx context.Context, serve
 				},
 			},
 		}
-		response, err := router.Exchange(ctx, message)
+		response, err := adapter.RouterFromContext(ctx).Exchange(ctx, message)
 		if err != nil {
 			return nil, err
 		}

@@ -11,10 +11,10 @@ import (
 	"strings"
 
 	cftls "github.com/sagernet/cloudflare-tls"
-	"github.com/sagernet/sing-box/adapter"
 	"github.com/sagernet/sing-box/log"
 	"github.com/sagernet/sing-box/option"
 	E "github.com/sagernet/sing/common/exceptions"
+	"github.com/sagernet/sing/common/ntp"
 
 	"github.com/fsnotify/fsnotify"
 )
@@ -27,6 +27,8 @@ type echServerConfig struct {
 	certificatePath string
 	keyPath         string
 	watcher         *fsnotify.Watcher
+	echKeyPath      string
+	echWatcher      *fsnotify.Watcher
 }
 
 func (c *echServerConfig) ServerName() string {
@@ -64,12 +66,11 @@ func (c *echServerConfig) Clone() Config {
 }
 
 func (c *echServerConfig) Start() error {
-	if c.certificatePath == "" && c.keyPath == "" {
-		return nil
-	}
-	err := c.startWatcher()
-	if err != nil {
-		c.logger.Warn("create fsnotify watcher: ", err)
+	if c.certificatePath != "" && c.keyPath != "" {
+		err := c.startWatcher()
+		if err != nil {
+			c.logger.Warn("create fsnotify watcher: ", err)
+		}
 	}
 	return nil
 }
@@ -143,6 +144,65 @@ func (c *echServerConfig) reloadKeyPair() error {
 	return nil
 }
 
+func (c *echServerConfig) startECHWatcher() error {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		return err
+	}
+	err = watcher.Add(c.echKeyPath)
+	if err != nil {
+		return err
+	}
+	c.watcher = watcher
+	go c.loopECHUpdate()
+	return nil
+}
+
+func (c *echServerConfig) loopECHUpdate() {
+	for {
+		select {
+		case event, ok := <-c.echWatcher.Events:
+			if !ok {
+				return
+			}
+			if event.Op&fsnotify.Write != fsnotify.Write {
+				continue
+			}
+			err := c.reloadECHKey()
+			if err != nil {
+				c.logger.Error(E.Cause(err, "reload ECH key"))
+			}
+		case err, ok := <-c.watcher.Errors:
+			if !ok {
+				return
+			}
+			c.logger.Error(E.Cause(err, "fsnotify error"))
+		}
+	}
+}
+
+func (c *echServerConfig) reloadECHKey() error {
+	echKeyContent, err := os.ReadFile(c.echKeyPath)
+	if err != nil {
+		return err
+	}
+	block, rest := pem.Decode(echKeyContent)
+	if block == nil || block.Type != "ECH KEYS" || len(rest) > 0 {
+		return E.New("invalid ECH keys pem")
+	}
+	echKeys, err := cftls.EXP_UnmarshalECHKeys(block.Bytes)
+	if err != nil {
+		return E.Cause(err, "parse ECH keys")
+	}
+	echKeySet, err := cftls.EXP_NewECHKeySet(echKeys)
+	if err != nil {
+		return E.Cause(err, "create ECH key set")
+	}
+	c.config.ServerECHProvider = echKeySet
+	c.logger.Info("reloaded ECH keys")
+	return nil
+}
+
 func (c *echServerConfig) Close() error {
 	if c.watcher != nil {
 		return c.watcher.Close()
@@ -150,7 +210,7 @@ func (c *echServerConfig) Close() error {
 	return nil
 }
 
-func NewECHServer(ctx context.Context, router adapter.Router, logger log.Logger, options option.InboundTLSOptions) (ServerConfig, error) {
+func NewECHServer(ctx context.Context, logger log.Logger, options option.InboundTLSOptions) (ServerConfig, error) {
 	if !options.Enabled {
 		return nil, nil
 	}
@@ -158,7 +218,7 @@ func NewECHServer(ctx context.Context, router adapter.Router, logger log.Logger,
 	if options.ACME != nil && len(options.ACME.Domain) > 0 {
 		return nil, E.New("acme is unavailable in ech")
 	}
-	tlsConfig.Time = router.TimeFunc()
+	tlsConfig.Time = ntp.TimeFuncFromContext(ctx)
 	if options.ServerName != "" {
 		tlsConfig.ServerName = options.ServerName
 	}
@@ -193,8 +253,8 @@ func NewECHServer(ctx context.Context, router adapter.Router, logger log.Logger,
 	}
 	var certificate []byte
 	var key []byte
-	if options.Certificate != "" {
-		certificate = []byte(options.Certificate)
+	if len(options.Certificate) > 0 {
+		certificate = []byte(strings.Join(options.Certificate, "\n"))
 	} else if options.CertificatePath != "" {
 		content, err := os.ReadFile(options.CertificatePath)
 		if err != nil {
@@ -202,8 +262,8 @@ func NewECHServer(ctx context.Context, router adapter.Router, logger log.Logger,
 		}
 		certificate = content
 	}
-	if options.Key != "" {
-		key = []byte(options.Key)
+	if len(options.Key) > 0 {
+		key = []byte(strings.Join(options.Key, ""))
 	} else if options.KeyPath != "" {
 		content, err := os.ReadFile(options.KeyPath)
 		if err != nil {
@@ -251,5 +311,6 @@ func NewECHServer(ctx context.Context, router adapter.Router, logger log.Logger,
 		key:             key,
 		certificatePath: options.CertificatePath,
 		keyPath:         options.KeyPath,
+		echKeyPath:      options.ECH.KeyPath,
 	}, nil
 }

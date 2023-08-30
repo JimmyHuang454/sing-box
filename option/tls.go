@@ -8,9 +8,9 @@ type InboundTLSOptions struct {
 	MinVersion      string                 `json:"min_version,omitempty"`
 	MaxVersion      string                 `json:"max_version,omitempty"`
 	CipherSuites    Listable[string]       `json:"cipher_suites,omitempty"`
-	Certificate     string                 `json:"certificate,omitempty"`
+	Certificate     Listable[string]       `json:"certificate,omitempty"`
 	CertificatePath string                 `json:"certificate_path,omitempty"`
-	Key             string                 `json:"key,omitempty"`
+	Key             Listable[string]       `json:"key,omitempty"`
 	KeyPath         string                 `json:"key_path,omitempty"`
 	ACME            *InboundACMEOptions    `json:"acme,omitempty"`
 	ECH             *InboundECHOptions     `json:"ech,omitempty"`
@@ -59,6 +59,7 @@ type InboundECHOptions struct {
 	PQSignatureSchemesEnabled   bool             `json:"pq_signature_schemes_enabled,omitempty"`
 	DynamicRecordSizingDisabled bool             `json:"dynamic_record_sizing_disabled,omitempty"`
 	Key                         Listable[string] `json:"ech_keys,omitempty"`
+	KeyPath                     string           `json:"ech_keys_path,omitempty"`
 }
 
 type OutboundECHOptions struct {
@@ -66,6 +67,7 @@ type OutboundECHOptions struct {
 	PQSignatureSchemesEnabled   bool             `json:"pq_signature_schemes_enabled,omitempty"`
 	DynamicRecordSizingDisabled bool             `json:"dynamic_record_sizing_disabled,omitempty"`
 	Config                      Listable[string] `json:"config,omitempty"`
+	ConfigPath                  string           `json:"config_path,omitempty"`
 }
 
 type OutboundUTLSOptions struct {
