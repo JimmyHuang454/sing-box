@@ -10,7 +10,7 @@ require (
 	github.com/docker/docker v24.0.5+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/gofrs/uuid/v5 v5.0.0
-	github.com/sagernet/sing v0.2.10-0.20230830154632-9b8d50cc5c66
+	github.com/sagernet/sing v0.2.10-0.20230830132630-30bf19f2833c
 	github.com/sagernet/sing-shadowsocks v0.2.4
 	github.com/sagernet/sing-shadowsocks2 v0.1.3
 	github.com/spyzhov/ajson v0.9.0
