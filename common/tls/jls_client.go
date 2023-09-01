@@ -5,7 +5,6 @@ import (
 	"net"
 
 	JLS "github.com/JimmyHuang454/JLS-go/tls"
-	"github.com/sagernet/sing-box/adapter"
 	"github.com/sagernet/sing-box/option"
 	E "github.com/sagernet/sing/common/exceptions"
 	"github.com/sagernet/sing/common/ntp"

@@ -12,7 +12,7 @@ import (
 var pqSignatureSchemesEnabled bool
 
 var commandGenerateECHKeyPair = &cobra.Command{
-	Use:   "ech-keypair <host>",
+	Use:   "ech-keypair <plain_server_name>",
 	Short: "Generate TLS ECH key pair",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -28,8 +28,8 @@ func init() {
 	commandGenerate.AddCommand(commandGenerateECHKeyPair)
 }
 
-func generateECHKeyPair(host string) error {
-	configPem, keyPem, err := tls.ECHKeygenDefault(host, pqSignatureSchemesEnabled)
+func generateECHKeyPair(serverName string) error {
+	configPem, keyPem, err := tls.ECHKeygenDefault(serverName, pqSignatureSchemesEnabled)
 	if err != nil {
 		return err
 	}

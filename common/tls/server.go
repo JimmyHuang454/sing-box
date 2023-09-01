@@ -19,7 +19,7 @@ func NewServer(ctx context.Context, logger log.Logger, options option.InboundTLS
 	} else if options.Reality != nil && options.Reality.Enabled {
 		return NewRealityServer(ctx, logger, options)
 	} else if options.JLS != nil && options.JLS.Enabled {
-		return NewJLSServer(ctx, router, logger, options)
+		return NewJLSServer(ctx, logger, options)
 	} else {
 		return NewSTDServer(ctx, logger, options)
 	}

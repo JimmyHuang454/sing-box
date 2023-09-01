@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/circl/kem"
 )
 
-func ECHKeygenDefault(host string, pqSignatureSchemesEnabled bool) (configPem string, keyPem string, err error) {
+func ECHKeygenDefault(serverName string, pqSignatureSchemesEnabled bool) (configPem string, keyPem string, err error) {
 	cipherSuites := []echCipherSuite{
 		{
 			kdf:  hpke.KDF_HKDF_SHA256,
@@ -32,7 +32,7 @@ func ECHKeygenDefault(host string, pqSignatureSchemesEnabled bool) (configPem st
 		keyConfig = append(keyConfig, myECHKeyConfig{id: 1, kem: hpke.KEM_X25519_KYBER768_DRAFT00})
 	}
 
-	keyPairs, err := echKeygen(0xfe0d, host, keyConfig, cipherSuites)
+	keyPairs, err := echKeygen(0xfe0d, serverName, keyConfig, cipherSuites)
 	if err != nil {
 		return
 	}
@@ -76,7 +76,7 @@ type myECHKeyConfig struct {
 	seed []byte
 }
 
-func echKeygen(version uint16, host string, conf []myECHKeyConfig, suite []echCipherSuite) ([]echKeyConfigPair, error) {
+func echKeygen(version uint16, serverName string, conf []myECHKeyConfig, suite []echCipherSuite) ([]echKeyConfigPair, error) {
 	be := binary.BigEndian
 	// prepare for future update
 	if version != 0xfe0d {
@@ -137,8 +137,8 @@ func echKeygen(version uint16, host string, conf []myECHKeyConfig, suite []echCi
 		// max name len, not supported
 		b = append(b, 0)
 		// server name
-		b = append(b, byte(len(host)))
-		b = append(b, []byte(host)...)
+		b = append(b, byte(len(serverName)))
+		b = append(b, []byte(serverName)...)
 		// extensions, not supported
 		b = be.AppendUint16(b, 0)
 

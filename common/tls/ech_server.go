@@ -72,6 +72,12 @@ func (c *echServerConfig) Start() error {
 			c.logger.Warn("create fsnotify watcher: ", err)
 		}
 	}
+	if c.echKeyPath != "" {
+		err := c.startECHWatcher()
+		if err != nil {
+			c.logger.Warn("create fsnotify watcher: ", err)
+		}
+	}
 	return nil
 }
 
@@ -204,10 +210,18 @@ func (c *echServerConfig) reloadECHKey() error {
 }
 
 func (c *echServerConfig) Close() error {
+	var err error
 	if c.watcher != nil {
-		return c.watcher.Close()
+		err = E.Append(err, c.watcher.Close(), func(err error) error {
+			return E.Cause(err, "close certificate watcher")
+		})
 	}
-	return nil
+	if c.echWatcher != nil {
+		err = E.Append(err, c.echWatcher.Close(), func(err error) error {
+			return E.Cause(err, "close ECH key watcher")
+		})
+	}
+	return err
 }
 
 func NewECHServer(ctx context.Context, logger log.Logger, options option.InboundTLSOptions) (ServerConfig, error) {
@@ -263,7 +277,7 @@ func NewECHServer(ctx context.Context, logger log.Logger, options option.Inbound
 		certificate = content
 	}
 	if len(options.Key) > 0 {
-		key = []byte(strings.Join(options.Key, ""))
+		key = []byte(strings.Join(options.Key, "\n"))
 	} else if options.KeyPath != "" {
 		content, err := os.ReadFile(options.KeyPath)
 		if err != nil {
@@ -284,7 +298,20 @@ func NewECHServer(ctx context.Context, logger log.Logger, options option.Inbound
 	}
 	tlsConfig.Certificates = []cftls.Certificate{keyPair}
 
-	block, rest := pem.Decode([]byte(strings.Join(options.ECH.Key, "\n")))
+	var echKey []byte
+	if len(options.ECH.Key) > 0 {
+		echKey = []byte(strings.Join(options.ECH.Key, "\n"))
+	} else if options.KeyPath != "" {
+		content, err := os.ReadFile(options.ECH.KeyPath)
+		if err != nil {
+			return nil, E.Cause(err, "read key")
+		}
+		echKey = content
+	} else {
+		return nil, E.New("missing ECH key")
+	}
+
+	block, rest := pem.Decode(echKey)
 	if block == nil || block.Type != "ECH KEYS" || len(rest) > 0 {
 		return nil, E.New("invalid ECH keys pem")
 	}
