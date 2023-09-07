@@ -3,6 +3,7 @@ package settings
 import (
 	"context"
 	"net/netip"
+	"strconv"
 	"strings"
 
 	"github.com/sagernet/sing-box/adapter"
@@ -88,16 +89,16 @@ func (p *DarwinSystemProxy) update0() error {
 		return err
 	}
 	if p.supportSOCKS {
-		err = shell.Exec("networksetup", "-setsocksfirewallproxy", interfaceDisplayName, p.serverAddr.String()).Attach().Run()
+		err = shell.Exec("networksetup", "-setsocksfirewallproxy", interfaceDisplayName, p.serverAddr.AddrString(), strconv.Itoa(int(p.serverAddr.Port))).Attach().Run()
 	}
 	if err != nil {
 		return err
 	}
-	err = shell.Exec("networksetup", "-setwebproxy", interfaceDisplayName, p.serverAddr.String()).Attach().Run()
+	err = shell.Exec("networksetup", "-setwebproxy", interfaceDisplayName, p.serverAddr.AddrString(), strconv.Itoa(int(p.serverAddr.Port))).Attach().Run()
 	if err != nil {
 		return err
 	}
-	err = shell.Exec("networksetup", "-setsecurewebproxy", interfaceDisplayName, p.serverAddr.String()).Attach().Run()
+	err = shell.Exec("networksetup", "-setsecurewebproxy", interfaceDisplayName, p.serverAddr.AddrString(), strconv.Itoa(int(p.serverAddr.Port))).Attach().Run()
 	if err != nil {
 		return err
 	}

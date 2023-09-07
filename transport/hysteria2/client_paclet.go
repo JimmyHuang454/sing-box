@@ -19,7 +19,7 @@ func (c *Client) loopMessages(conn *clientQUICConnection) {
 }
 
 func (c *Client) handleMessage(conn *clientQUICConnection, data []byte) error {
-	message := udpMessagePool.Get().(*udpMessage)
+	message := allocMessage()
 	err := decodeUDPMessage(message, data)
 	if err != nil {
 		message.release()

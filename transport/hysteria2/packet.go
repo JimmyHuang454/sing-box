@@ -28,11 +28,16 @@ var udpMessagePool = sync.Pool{
 	},
 }
 
+func allocMessage() *udpMessage {
+	message := udpMessagePool.Get().(*udpMessage)
+	message.referenced = true
+	return message
+}
+
 func releaseMessages(messages []*udpMessage) {
 	for _, message := range messages {
 		if message != nil {
-			*message = udpMessage{}
-			udpMessagePool.Put(message)
+			message.release()
 		}
 	}
 }
@@ -44,9 +49,13 @@ type udpMessage struct {
 	fragmentTotal uint8
 	destination   string
 	data          *buf.Buffer
+	referenced    bool
 }
 
 func (m *udpMessage) release() {
+	if !m.referenced {
+		return
+	}
 	*m = udpMessage{}
 	udpMessagePool.Put(m)
 }
@@ -81,7 +90,7 @@ func fragUDPMessage(message *udpMessage, maxPacketSize int) []*udpMessage {
 	originPacket := message.data.Bytes()
 	udpMTU := maxPacketSize - message.headerSize()
 	for remaining := len(originPacket); remaining > 0; remaining -= udpMTU {
-		fragment := udpMessagePool.Get().(*udpMessage)
+		fragment := allocMessage()
 		*fragment = *message
 		if remaining > udpMTU {
 			fragment.data = buf.As(originPacket[:udpMTU])
@@ -207,7 +216,7 @@ func (c *udpPacketConn) WritePacket(buffer *buf.Buffer, destination M.Socksaddr)
 		c.packetId.Store(0)
 		packetId = 0
 	}
-	message := udpMessagePool.Get().(*udpMessage)
+	message := allocMessage()
 	*message = udpMessage{
 		sessionID:     c.sessionID,
 		packetID:      uint16(packetId),
@@ -248,7 +257,7 @@ func (c *udpPacketConn) WriteTo(p []byte, addr net.Addr) (n int, err error) {
 		c.packetId.Store(0)
 		packetId = 0
 	}
-	message := udpMessagePool.Get().(*udpMessage)
+	message := allocMessage()
 	*message = udpMessage{
 		sessionID:     c.sessionID,
 		packetID:      uint16(packetId),
@@ -389,8 +398,10 @@ func (d *udpDefragger) feed(m *udpMessage) *udpMessage {
 	if int(item.count) != len(item.messages) {
 		return nil
 	}
-	newMessage := udpMessagePool.Get().(*udpMessage)
-	*newMessage = *item.messages[0]
+	newMessage := allocMessage()
+	newMessage.sessionID = m.sessionID
+	newMessage.packetID = m.packetID
+	newMessage.destination = item.messages[0].destination
 	var finalLength int
 	for _, message := range item.messages {
 		finalLength += message.data.Len()
@@ -404,6 +415,7 @@ func (d *udpDefragger) feed(m *udpMessage) *udpMessage {
 		item.messages = nil
 		return newMessage
 	}
+	item.messages = nil
 	return nil
 }
 

@@ -17,6 +17,7 @@ import (
 	"github.com/sagernet/sing-box/transport/hysteria2/congestion"
 	"github.com/sagernet/sing-box/transport/hysteria2/internal/protocol"
 	tuicCongestion "github.com/sagernet/sing-box/transport/tuic/congestion"
+	"github.com/sagernet/sing/common/baderror"
 	"github.com/sagernet/sing/common/bufio"
 	E "github.com/sagernet/sing/common/exceptions"
 	M "github.com/sagernet/sing/common/metadata"
@@ -273,14 +274,15 @@ func (c *clientConn) Read(p []byte) (n int, err error) {
 	}
 	status, errorMessage, err := protocol.ReadTCPResponse(c.Stream)
 	if err != nil {
-		return
+		return 0, baderror.WrapQUIC(err)
 	}
 	if !status {
 		err = E.New("remote error: ", errorMessage)
 		return
 	}
 	c.responseRead = true
-	return c.Stream.Read(p)
+	n, err = c.Stream.Read(p)
+	return n, baderror.WrapQUIC(err)
 }
 
 func (c *clientConn) Write(p []byte) (n int, err error) {
@@ -294,7 +296,8 @@ func (c *clientConn) Write(p []byte) (n int, err error) {
 		c.requestWritten = true
 		return len(p), nil
 	}
-	return c.Stream.Write(p)
+	n, err = c.Stream.Write(p)
+	return n, baderror.WrapQUIC(err)
 }
 
 func (c *clientConn) LocalAddr() net.Addr {
@@ -303,4 +306,9 @@ func (c *clientConn) LocalAddr() net.Addr {
 
 func (c *clientConn) RemoteAddr() net.Addr {
 	return M.Socksaddr{}
+}
+
+func (c *clientConn) Close() error {
+	c.Stream.CancelRead(0)
+	return c.Stream.Close()
 }

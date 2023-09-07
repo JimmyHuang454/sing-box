@@ -154,7 +154,7 @@ func (p *LinuxSystemProxy) setKDEProxy(proxyTypes ...string) error {
 			"--file",
 			"kioslaverc",
 			"--group",
-			"'Proxy Settings'",
+			"Proxy Settings",
 			"--key", proxyType+"Proxy",
 			proxyUrl,
 		)

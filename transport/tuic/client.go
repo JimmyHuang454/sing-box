@@ -6,16 +6,15 @@ import (
 	"context"
 	"io"
 	"net"
-	"os"
 	"runtime"
 	"sync"
 	"time"
 
 	"github.com/sagernet/quic-go"
-	"github.com/sagernet/sing-box/common/baderror"
 	"github.com/sagernet/sing-box/common/qtls"
 	"github.com/sagernet/sing-box/common/tls"
 	"github.com/sagernet/sing/common"
+	"github.com/sagernet/sing/common/baderror"
 	"github.com/sagernet/sing/common/buf"
 	"github.com/sagernet/sing/common/bufio"
 	E "github.com/sagernet/sing/common/exceptions"
@@ -187,8 +186,8 @@ func (c *Client) DialConn(ctx context.Context, destination M.Socksaddr) (net.Con
 		return nil, err
 	}
 	return &clientConn{
+		Stream:      stream,
 		parent:      conn,
-		stream:      stream,
 		destination: destination,
 	}, nil
 }
@@ -256,8 +255,8 @@ func (c *clientQUICConnection) closeWithError(err error) {
 }
 
 type clientConn struct {
+	quic.Stream
 	parent         *clientQUICConnection
-	stream         quic.Stream
 	destination    M.Socksaddr
 	requestWritten bool
 }
@@ -267,18 +266,22 @@ func (c *clientConn) NeedHandshake() bool {
 }
 
 func (c *clientConn) Read(b []byte) (n int, err error) {
-	n, err = c.stream.Read(b)
+	n, err = c.Stream.Read(b)
 	return n, baderror.WrapQUIC(err)
 }
 
 func (c *clientConn) Write(b []byte) (n int, err error) {
 	if !c.requestWritten {
 		request := buf.NewSize(2 + addressSerializer.AddrPortLen(c.destination) + len(b))
+		defer request.Release()
 		request.WriteByte(Version)
 		request.WriteByte(CommandConnect)
-		addressSerializer.WriteAddrPort(request, c.destination)
+		err = addressSerializer.WriteAddrPort(request, c.destination)
+		if err != nil {
+			return
+		}
 		request.Write(b)
-		_, err = c.stream.Write(request.Bytes())
+		_, err = c.Stream.Write(request.Bytes())
 		if err != nil {
 			c.parent.closeWithError(E.Cause(err, "create new connection"))
 			return 0, baderror.WrapQUIC(err)
@@ -286,17 +289,13 @@ func (c *clientConn) Write(b []byte) (n int, err error) {
 		c.requestWritten = true
 		return len(b), nil
 	}
-	n, err = c.stream.Write(b)
+	n, err = c.Stream.Write(b)
 	return n, baderror.WrapQUIC(err)
 }
 
 func (c *clientConn) Close() error {
-	stream := c.stream
-	if stream == nil {
-		return nil
-	}
-	stream.CancelRead(0)
-	return stream.Close()
+	c.Stream.CancelRead(0)
+	return c.Stream.Close()
 }
 
 func (c *clientConn) LocalAddr() net.Addr {
@@ -305,25 +304,4 @@ func (c *clientConn) LocalAddr() net.Addr {
 
 func (c *clientConn) RemoteAddr() net.Addr {
 	return c.destination
-}
-
-func (c *clientConn) SetDeadline(t time.Time) error {
-	if c.stream == nil {
-		return os.ErrInvalid
-	}
-	return c.stream.SetDeadline(t)
-}
-
-func (c *clientConn) SetReadDeadline(t time.Time) error {
-	if c.stream == nil {
-		return os.ErrInvalid
-	}
-	return c.stream.SetReadDeadline(t)
-}
-
-func (c *clientConn) SetWriteDeadline(t time.Time) error {
-	if c.stream == nil {
-		return os.ErrInvalid
-	}
-	return c.stream.SetWriteDeadline(t)
 }
