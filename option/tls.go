@@ -37,6 +37,7 @@ type OutboundTLSOptions struct {
 
 type JLSOptions struct {
 	Enabled  bool   `json:"enabled,omitempty"`
+	UseQuic  bool   `json:"useQuic,omitempty"`
 	IV       string `json:"random,omitempty"`
 	Password string `json:"password,omitempty"`
 }

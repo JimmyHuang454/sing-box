@@ -34,7 +34,7 @@ func NewClient(ctx context.Context, serverAddress string, options option.Outboun
 		return NewRealityClient(ctx, serverAddress, options)
 	} else if options.UTLS != nil && options.UTLS.Enabled {
 		return NewUTLSClient(ctx, serverAddress, options)
-	} else if options.JLS != nil && options.JLS.Enabled {
+	} else if options.JLS != nil && options.JLS.Enabled && !options.JLS.UseQuic {
 		return NewJLSlient(ctx, serverAddress, options)
 	} else {
 		return NewSTDClient(ctx, serverAddress, options)

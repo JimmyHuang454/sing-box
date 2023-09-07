@@ -231,7 +231,7 @@ func NewSTDServer(ctx context.Context, logger log.Logger, options option.Inbound
 			}
 			key = content
 		}
-		if certificate == nil && key == nil && options.Insecure {
+		if certificate == nil && key == nil && options.Insecure || (options.JLS != nil && options.JLS.Enabled) {
 			tlsConfig.GetCertificate = func(info *tls.ClientHelloInfo) (*tls.Certificate, error) {
 				return GenerateKeyPair(ntp.TimeFuncFromContext(ctx), info.ServerName)
 			}

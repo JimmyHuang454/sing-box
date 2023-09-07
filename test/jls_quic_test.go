@@ -8,7 +8,7 @@ import (
 	"github.com/sagernet/sing-box/option"
 )
 
-func TestJLSTCP(t *testing.T) {
+func TestJLSQUIC(t *testing.T) {
 	startInstance(t, option.Options{
 		Inbounds: []option.Inbound{
 			{
@@ -36,8 +36,12 @@ func TestJLSTCP(t *testing.T) {
 					},
 					TLS: &option.InboundTLSOptions{
 						Enabled:    true,
-						ServerName: "www.apple.com",
-						JLS:        &option.JLSOptions{Enabled: true, IV: "abc", Password: "abc"},
+						ServerName: "example.org",
+						JLS:        &option.JLSOptions{Enabled: true},
+					},
+					Transport: &option.V2RayTransportOptions{
+						Type:        C.V2RayTransportTypeQUIC,
+						QUICOptions: option.V2RayQUICOptions{JLS: &option.JLSOptions{Enabled: true, Password: "123", IV: "123"}},
 					},
 				},
 			},
@@ -57,8 +61,12 @@ func TestJLSTCP(t *testing.T) {
 					Password: "password",
 					TLS: &option.OutboundTLSOptions{
 						Enabled:    true,
-						ServerName: "www.apple.com",
-						JLS:        &option.JLSOptions{Enabled: true, IV: "abc", Password: "abc"},
+						ServerName: "example.org",
+						JLS:        &option.JLSOptions{Enabled: true},
+					},
+					Transport: &option.V2RayTransportOptions{
+						Type:        C.V2RayTransportTypeQUIC,
+						QUICOptions: option.V2RayQUICOptions{JLS: &option.JLSOptions{Enabled: true, Password: "123", IV: "123"}},
 					},
 				},
 			},
