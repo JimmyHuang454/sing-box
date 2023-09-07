@@ -38,7 +38,12 @@ func NewClient(ctx context.Context, dialer N.Dialer, serverAddr M.Socksaddr, opt
 		DisablePathMTUDiscovery: !C.IsLinux && !C.IsWindows,
 	}
 	if len(tlsConfig.NextProtos()) == 0 {
-		tlsConfig.SetNextProtos([]string{"h2", "http/1.1"})
+		tlsConfig.SetNextProtos([]string{"h2", "h3"})
+	}
+	if options.JLS != nil && options.JLS.Enabled {
+		quicConfig.UseJLS = true
+		quicConfig.JLSIV = []byte(options.JLS.IV)
+		quicConfig.JLSPWD = []byte(options.JLS.Password)
 	}
 	return &Client{
 		ctx:        ctx,
