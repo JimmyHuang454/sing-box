@@ -1,0 +1,41 @@
+{
+  "log": {
+    "level": "debug"
+  },
+  "inbounds": [{
+    "type": "http",
+    "tag": "httpIn",
+    "listen": "127.0.0.1",
+    "listen_port": 4088
+  }],
+  "outbounds": [{
+    "type": "direct"
+  }, {
+    "type": "trojan",
+    "tag": "proxy",
+    "server": "127.0.0.1",
+    "server_port": 1443,
+    "transport": {
+      "type": "quic"
+    },
+    "tls": {
+      "enabled": true,
+      "server_name": "www.gov.hk",
+      "jls": {
+        "enabled": true,
+        "random": "123456",
+        "password": "123456"
+      }
+    },
+    "network": "tcp",
+    "password": "abcd"
+  }],
+  "route": {
+    "rules": [{
+      "inbound": [
+        "httpIn"
+      ],
+      "outbound": "proxy"
+    }]
+  }
+}
