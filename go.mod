@@ -55,10 +55,10 @@ require (
 	howett.net/plist v1.0.0
 )
 
-// replace github.com/sagernet/quic-go v0.0.0-20230831052420-45809eee2e86 => github.com/JimmyHuang454/quic-go v0.0.0-20230907171826-f1f9915a9a81
+replace github.com/sagernet/quic-go v0.0.0-20230831052420-45809eee2e86 => github.com/JimmyHuang454/quic-go v0.0.0-20230908043436-7734ec985389
 
-replace github.com/sagernet/quic-go => ../quic-go
-replace github.com/JimmyHuang454/qtls-go1-20-JLS => ../qtls-go1-20-JLS
+//replace github.com/sagernet/quic-go => ../quic-go
+//replace github.com/JimmyHuang454/qtls-go1-20-JLS => ../qtls-go1-20-JLS
 
 //replace github.com/sagernet/sing => ../sing
 
