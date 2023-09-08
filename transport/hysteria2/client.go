@@ -62,7 +62,6 @@ type Client struct {
 func NewClient(options ClientOptions) (*Client, error) {
 	quicConfig := &quic.Config{
 		DisablePathMTUDiscovery:        !(runtime.GOOS == "windows" || runtime.GOOS == "linux" || runtime.GOOS == "android" || runtime.GOOS == "darwin"),
-		MaxDatagramFrameSize:           1400,
 		EnableDatagrams:                true,
 		InitialStreamReceiveWindow:     defaultStreamReceiveWindow,
 		MaxStreamReceiveWindow:         defaultStreamReceiveWindow,
@@ -270,7 +269,8 @@ func (c *clientConn) NeedHandshake() bool {
 
 func (c *clientConn) Read(p []byte) (n int, err error) {
 	if c.responseRead {
-		return c.Stream.Read(p)
+		n, err = c.Stream.Read(p)
+		return n, baderror.WrapQUIC(err)
 	}
 	status, errorMessage, err := protocol.ReadTCPResponse(c.Stream)
 	if err != nil {

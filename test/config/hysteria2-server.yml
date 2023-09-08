@@ -2,7 +2,6 @@ listen: 127.0.0.1:10000
 auth:
   type: password
   password: password
-fastOpen: true
 tls:
   sni: example.org
   cert: /etc/hysteria/cert.pem
