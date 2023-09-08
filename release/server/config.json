@@ -23,7 +23,7 @@
   }, {
     "type": "tuic",
     "tag": "tuic",
-    "listen": "127.0.0.1",
+    "listen": "0.0.0.0",
     "listen_port": 443,
     "users": [{
       "uuid": "2DD61D93-75D8-4DA4-AC0E-6AECE7EAC365",
