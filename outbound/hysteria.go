@@ -74,8 +74,8 @@ func NewHysteria(ctx context.Context, router adapter.Router, logger log.ContextL
 	}
 	if options.TLS.JLS != nil && options.TLS.JLS.Enabled {
 		quicConfig.UseJLS = true
-		quicConfig.JLSIV = []byte(options.JLS.IV)
-		quicConfig.JLSPWD = []byte(options.JLS.Password)
+		quicConfig.JLSIV = []byte(options.TLS.JLS.IV)
+		quicConfig.JLSPWD = []byte(options.TLS.JLS.Password)
 	}
 	if options.ReceiveWindowConn == 0 {
 		quicConfig.InitialStreamReceiveWindow = hysteria.DefaultStreamReceiveWindow
