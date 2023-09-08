@@ -2,17 +2,6 @@
   "log": {
     "level": "debug"
   },
-  "dns": {
-    "servers": [{
-        "tag": "local",
-        "address": "udp://114.114.114.114"
-      },
-      {
-        "address_resolver": "local",
-        "address": "https://doh.pub/dns-query"
-      }
-    ]
-  },
   "inbounds": [{
     "type": "http",
     "tag": "httpIn",
@@ -22,12 +11,10 @@
   "outbounds": [{
     "type": "urltest",
     "tag": "proxy",
-
     "outbounds": [
-      "trojanTCP",
-      "proxyQUIC"
+      "trojan",
+      "tuic"
     ],
-    "url": "https://www.gstatic.com/generate_204",
     "interval": "1m",
     "tolerance": 5000
   }, {
@@ -35,39 +22,39 @@
     "tag": "freedom"
   }, {
     "type": "trojan",
-    "tag": "trojanTCP",
+    "tag": "trojan",
     "server": "0.0.0.0",
     "server_port": 443,
     "tls": {
       "enabled": true,
-      "server_name": "www.gov.hk",
+      "server_name": "www.jsdelivr.com",
+      "alpn": ["h2"],
       "jls": {
         "enabled": true,
-        "random": "123456",
-        "password": "123456"
+        "password": "123456",
+        "random": "abcabc"
       }
     },
-    "network": "tcp",
-    "password": "abcd"
+    "password": "password"
   }, {
-    "type": "trojan",
-    "tag": "proxyQUIC",
+    "type": "tuic",
+    "tag": "tuic",
     "server": "0.0.0.0",
     "server_port": 443,
-    "transport": {
-      "type": "quic"
-    },
+    "uuid": "2DD61D93-75D8-4DA4-AC0E-6AECE7EAC365",
+    "password": "password",
+    "congestion_control": "bbr",
+    "udp_relay_mode": "native",
     "tls": {
       "enabled": true,
-      "server_name": "www.gov.hk",
+      "server_name": "www.jsdelivr.com",
+      "alpn": ["h2", "h3"],
       "jls": {
         "enabled": true,
-        "random": "123456",
-        "password": "123456"
+        "password": "123456",
+        "random": "abcabc"
       }
-    },
-    "network": "tcp",
-    "password": "abcd"
+    }
   }],
   "route": {
     "geoip": {
@@ -77,23 +64,20 @@
       "download_detour": "proxy"
     },
     "rules": [{
-        "domain_suffix": [
-          ".cn"
-        ],
-        "outbound": "freedom"
-      },
-      {
-        "geoip": [
-          "cn"
-        ],
-        "outbound": "freedom"
-      },
-      {
-        "inbound": [
-          "httpIn"
-        ],
-        "outbound": "proxy"
-      }
-    ]
+      "domain_suffix": [
+        ".cn"
+      ],
+      "outbound": "freedom"
+    }, {
+      "geoip": [
+        "cn"
+      ],
+      "outbound": "freedom"
+    }, {
+      "inbound": [
+        "httpIn"
+      ],
+      "outbound": "tuic"
+    }]
   }
 }

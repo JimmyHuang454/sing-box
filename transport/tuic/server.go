@@ -40,6 +40,7 @@ type ServerOptions struct {
 	ZeroRTTHandshake  bool
 	Heartbeat         time.Duration
 	Handler           ServerHandler
+
 	JLS               *option.JLSOptions
 }
 
