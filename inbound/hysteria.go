@@ -44,6 +44,9 @@ type Hysteria struct {
 }
 
 func NewHysteria(ctx context.Context, router adapter.Router, logger log.ContextLogger, tag string, options option.HysteriaInboundOptions) (*Hysteria, error) {
+	if options.TLS == nil || !options.TLS.Enabled {
+		return nil, C.ErrTLSRequired
+	}
 	options.UDPFragmentDefault = true
 	quicConfig := &quic.Config{
 		InitialStreamReceiveWindow:     options.ReceiveWindowConn,
@@ -54,6 +57,12 @@ func NewHysteria(ctx context.Context, router adapter.Router, logger log.ContextL
 		KeepAlivePeriod:                hysteria.KeepAlivePeriod,
 		DisablePathMTUDiscovery:        options.DisableMTUDiscovery || !(C.IsLinux || C.IsWindows),
 		EnableDatagrams:                true,
+	}
+	if options.TLS.JLS != nil && options.TLS.JLS.Enabled {
+		options.TLS.JLS.UseQuic = true
+		quicConfig.UseJLS = true
+		quicConfig.JLSIV = []byte(options.TLS.JLS.IV)
+		quicConfig.JLSPWD = []byte(options.TLS.JLS.Password)
 	}
 	if options.ReceiveWindowConn == 0 {
 		quicConfig.InitialStreamReceiveWindow = hysteria.DefaultStreamReceiveWindow
@@ -120,9 +129,6 @@ func NewHysteria(ctx context.Context, router adapter.Router, logger log.ContextL
 		sendBPS:     up,
 		recvBPS:     down,
 		udpSessions: make(map[uint32]chan *hysteria.UDPMessage),
-	}
-	if options.TLS == nil || !options.TLS.Enabled {
-		return nil, C.ErrTLSRequired
 	}
 	if len(options.TLS.ALPN) == 0 {
 		options.TLS.ALPN = []string{hysteria.DefaultALPN}
