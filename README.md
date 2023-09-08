@@ -1,10 +1,12 @@
-# sing-box
+[JLS](https://github.com/JimmyHuang454/JLS) 是一个 Fake TLS，对 TLS 最小修改，完全无缝替换安全层。
 
-The universal proxy platform.
+当检测到是有效用户，那么就会进行代理操作。非有效用户，就会将全部流量转发到指定地址。
 
-[![Packaging status](https://repology.org/badge/vertical-allrepos/sing-box.svg)](https://repology.org/project/sing-box/versions)
+无需用户配置证书，做到开箱即用，又不降低安全性。
 
-## Documentation
+## 文档
+
+配置跟原版 sing-box 一致，有 TLS 的协议都支持使用 JLS，包括 Tuic 和 Hysteria。
 
 https://sing-box.sagernet.org
 
@@ -18,7 +20,7 @@ https://sing-box.sagernet.org
 bash <(curl https://raw.githubusercontent.com/JimmyHuang454/sing-box/dev-next/release/server/quic_install.sh)
 ```
 
-安装成功后，会得到一串密码和随机数，端口默认443。
+安装成功后，会得到一串密码和随机数，端口默认443。 记得防火墙放行 TCP 443 和 UDP 443。
 
 类似这样，记得保存好。
 
@@ -43,18 +45,18 @@ systemctl stop sing-box
 
 ### Client
 
-假设使用 Windows 系统 x64 架构，到 [下载页面](https://github.com/JimmyHuang454/sing-box/releases) 下载最新版的 `sing-box-windows-amd64.zip`：
+假设使用 Windows 系统 x64 架构，到 [下载页面](https://github.com/JimmyHuang454/sing-box/releases/latest) 下载最新版的 `sing-box-windows-amd64.zip`：
 解压后，修改配置文件的密码，类似这样的：
 
-```json
+```json5
 {
-  "type": "trojan",
-  "tag": "trojanOut",
-  "server": "0.0.0.0", // 修改成 VPS 的 IP 地址
+  "type": "tuic",
+  "tag": "tuic",
+  "server": "0.0.0.0", // 修改成你 VPS 的 IP 地址
   "server_port": 443, // 服务端默认为443
   "tls": {
     "enabled": true,
-    "server_name": "www.visa.cn", // 伪装域名
+    "server_name": "www.apple.com", // 伪装域名
     "jls": {
       "enabled": true,
       "random": "123456", // 密码和随机数必须要填对
@@ -62,34 +64,17 @@ systemctl stop sing-box
     }
   },
   "network": "tcp",
-  "password": "abcd" // 可以不修改，但要填对
+  "password": "password", // 可以不修改，但要填对
 },
 ```
 
 最后运行：
 
 ```bash
-./sing-box run --config "./config.json"
+./sing-box run -c "./config.json"
 ```
 
 默认HTTP代理端口为8088，设置好本机代理即可使用
-
-### 推荐伪装站
-
-端口统一为 443；可以为任意网站，可以设置成一些官方政府网站或已备案网站，可能处在白名单列表中，不会影响安全性，用户数据不会发送到伪装站。
-
-用户可以自己去设置喜欢的网站，用 chrome 的开发者工具，查看它所使用的是不是 HTTPS，再去查查 IP 属地。不建议使用有转发功能的伪装站（例如说套用了 CDN 的网站）
-
-选择困难症？去 [这里](https://alexa.chinaz.com/)看看。
-
-```bash
-www.legco.gov.hk # 香港
-news.gov.hk
-www.gov.hk # 香港
-www.hangseng.com # 东京
-weibo.cn # 大陆
-...
-```
 
 ## License
 
