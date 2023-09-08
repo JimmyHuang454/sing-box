@@ -25,28 +25,39 @@
       "name": "abcd",
       "password": "abcd"
     }]
+  }, {
+    "type": "trojan",
+    "listen": "0.0.0.0",
+    "tag": "trojanInQuic",
+    "listen_port": 443,
+    "transport": {
+      "type": "quic"
+    },
+    "tls": {
+      "enabled": true,
+      "server_name": "www.gov.hk",
+      "jls": {
+        "enabled": true,
+        "password": "123456",
+        "random": "abcabc"
+      }
+    },
+    "users": [{
+      "name": "abcd",
+      "password": "abcd"
+    }]
   }],
   "outbounds": [{
-      "type": "direct",
-      "tag": "freedom"
-    },
-    {
-      "type": "dns",
-      "tag": "dns-out"
-    }
-  ],
+    "type": "direct",
+    "tag": "freedom"
+  }],
   "route": {
     "auto_detect_interface": true,
     "rules": [{
-        "inbound": [
-          "trojanIn"
-        ],
-        "outbound": "freedom"
-      },
-      {
-        "protocol": "dns",
-        "outbound": "dns-out"
-      }
-    ]
+      "inbound": [
+        "trojanIn"
+      ],
+      "outbound": "freedom"
+    }]
   }
 }
