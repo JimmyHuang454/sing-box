@@ -9,6 +9,8 @@ import (
 )
 
 func TestJLSQUIC(t *testing.T) {
+	_, certPem, keyPem := createSelfSignedCertificate(t, "example.org")
+
 	startInstance(t, option.Options{
 		Inbounds: []option.Inbound{
 			{
@@ -35,13 +37,14 @@ func TestJLSQUIC(t *testing.T) {
 						},
 					},
 					TLS: &option.InboundTLSOptions{
-						Enabled:    true,
-						ServerName: "example.org",
-						JLS:        &option.JLSOptions{Enabled: true},
+						Enabled:         true,
+						ServerName:      "www.jsdelivr.com",
+						JLS:             &option.JLSOptions{Enabled: true, Password: "123", IV: "456"},
+						CertificatePath: certPem,
+						KeyPath:         keyPem,
 					},
 					Transport: &option.V2RayTransportOptions{
-						Type:        C.V2RayTransportTypeQUIC,
-						QUICOptions: option.V2RayQUICOptions{JLS: &option.JLSOptions{Enabled: true, Password: "123", IV: "123"}},
+						Type: C.V2RayTransportTypeQUIC,
 					},
 				},
 			},
@@ -60,13 +63,13 @@ func TestJLSQUIC(t *testing.T) {
 					},
 					Password: "password",
 					TLS: &option.OutboundTLSOptions{
-						Enabled:    true,
-						ServerName: "example.org",
-						JLS:        &option.JLSOptions{Enabled: true},
+						Enabled:         true,
+						ServerName:      "www.jsdelivr.com",
+						JLS:             &option.JLSOptions{Enabled: true, Password: "123", IV: "456"},
+						CertificatePath: certPem,
 					},
 					Transport: &option.V2RayTransportOptions{
-						Type:        C.V2RayTransportTypeQUIC,
-						QUICOptions: option.V2RayQUICOptions{JLS: &option.JLSOptions{Enabled: true, Password: "123", IV: "123"}},
+						Type: C.V2RayTransportTypeQUIC,
 					},
 				},
 			},

@@ -37,7 +37,7 @@ func TestJLSTCP(t *testing.T) {
 					TLS: &option.InboundTLSOptions{
 						Enabled:    true,
 						ServerName: "www.apple.com",
-						JLS:        &option.JLSOptions{Enabled: true, IV: "abc", Password: "abc"},
+						JLS:        &option.JLSOptions{Enabled: true, IV: "123", Password: "abc"},
 					},
 				},
 			},
@@ -58,7 +58,7 @@ func TestJLSTCP(t *testing.T) {
 					TLS: &option.OutboundTLSOptions{
 						Enabled:    true,
 						ServerName: "www.apple.com",
-						JLS:        &option.JLSOptions{Enabled: true, IV: "abc", Password: "abc"},
+						JLS:        &option.JLSOptions{Enabled: true, IV: "123", Password: "abc"},
 					},
 				},
 			},

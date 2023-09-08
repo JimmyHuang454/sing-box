@@ -3,7 +3,6 @@ package tls
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
 	"net"
 
 	JLS "github.com/JimmyHuang454/JLS-go/tls"
@@ -111,8 +110,6 @@ func NewJLSServer(ctx context.Context, logger log.Logger, options option.Inbound
 	tlsConfig.JLSPWD = []byte(options.JLS.Password)
 	tlsConfig.JLSIV = []byte(options.JLS.IV)
 	tlsConfig.UseJLS = true
-	fmt.Println(tlsConfig.JLSPWD)
-	fmt.Println(tlsConfig.JLSIV)
 
 	return &JLSServerConfig{
 		config:   tlsConfig,

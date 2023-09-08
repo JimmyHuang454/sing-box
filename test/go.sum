@@ -5,8 +5,6 @@ github.com/Dreamacro/clash v1.17.0 h1:LWtp6KcnrCiujY58ufI8pylI+hbCBgSCsLI90EWhpi
 github.com/Dreamacro/clash v1.17.0/go.mod h1:PtcAft7sdsK325BD6uwm8wvhOkMV3TCeED6dfZ/lnfE=
 github.com/Dreamacro/protobytes v0.0.0-20230617041236-6500a9f4f158 h1:JFnwKplz9hj8ubqYjm8HkgZS1Rvz9yW+u/XCNNTxr0k=
 github.com/Dreamacro/protobytes v0.0.0-20230617041236-6500a9f4f158/go.mod h1:QvmEZ/h6KXszPOr2wUFl7Zn3hfFNYdfbXwPVDTyZs6k=
-github.com/JimmyHuang454/JLS-go v0.0.0-20230831150107-90d536585ba0 h1:DxMFBMVijXlhUmu7/vqh/hPGc/uCpmgJse+g4CqMyU8=
-github.com/JimmyHuang454/JLS-go v0.0.0-20230831150107-90d536585ba0/go.mod h1:bGr1SeIj/BwLkx2+p1kbaCPf6OJnGJImqcv9fYg6oII=
 github.com/JimmyHuang454/qtls-go1-20-JLS v0.0.0-20230907013506-e0f84291d2e9 h1:hXUpuzU2r8Ur3zA5ay1A18TpL1x3TDNKABaRXuDw3E4=
 github.com/JimmyHuang454/qtls-go1-20-JLS v0.0.0-20230907013506-e0f84291d2e9/go.mod h1:OFRBykuJ6qGCLprg7Hgk/JKvf2VPK2mz4LexbsI9eTg=
 github.com/JimmyHuang454/quic-go v0.0.0-20230907171826-f1f9915a9a81 h1:Nl0fItSDEl4DLZixP6h3UIKXoUU8pNwE5q3XpUiaEYU=

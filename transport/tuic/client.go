@@ -13,6 +13,7 @@ import (
 	"github.com/sagernet/quic-go"
 	"github.com/sagernet/sing-box/common/qtls"
 	"github.com/sagernet/sing-box/common/tls"
+	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/baderror"
 	"github.com/sagernet/sing/common/buf"
@@ -35,6 +36,8 @@ type ClientOptions struct {
 	UDPStream         bool
 	ZeroRTTHandshake  bool
 	Heartbeat         time.Duration
+
+	JLS *option.JLSOptions
 }
 
 type Client struct {
@@ -63,6 +66,11 @@ func NewClient(options ClientOptions) (*Client, error) {
 		MaxDatagramFrameSize:    1400,
 		EnableDatagrams:         true,
 		MaxIncomingUniStreams:   1 << 60,
+	}
+	if options.JLS != nil && options.JLS.Enabled {
+		quicConfig.UseJLS = true
+		quicConfig.JLSIV = []byte(options.JLS.IV)
+		quicConfig.JLSPWD = []byte(options.JLS.Password)
 	}
 	switch options.CongestionControl {
 	case "":

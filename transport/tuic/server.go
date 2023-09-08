@@ -16,6 +16,7 @@ import (
 	"github.com/sagernet/quic-go"
 	"github.com/sagernet/sing-box/common/qtls"
 	"github.com/sagernet/sing-box/common/tls"
+	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/auth"
 	"github.com/sagernet/sing/common/baderror"
@@ -39,6 +40,7 @@ type ServerOptions struct {
 	ZeroRTTHandshake  bool
 	Heartbeat         time.Duration
 	Handler           ServerHandler
+	JLS               *option.JLSOptions
 }
 
 type User struct {
@@ -80,6 +82,11 @@ func NewServer(options ServerOptions) (*Server, error) {
 		Allow0RTT:               options.ZeroRTTHandshake,
 		MaxIncomingStreams:      1 << 60,
 		MaxIncomingUniStreams:   1 << 60,
+	}
+	if options.JLS != nil && options.JLS.Enabled {
+		quicConfig.UseJLS = true
+		quicConfig.JLSIV = []byte(options.JLS.IV)
+		quicConfig.JLSPWD = []byte(options.JLS.Password)
 	}
 	switch options.CongestionControl {
 	case "":

@@ -41,6 +41,11 @@ func NewTUIC(ctx context.Context, router adapter.Router, logger log.ContextLogge
 	if options.TLS == nil || !options.TLS.Enabled {
 		return nil, C.ErrTLSRequired
 	}
+	jls := &option.JLSOptions{Enabled: false}
+	if options.TLS.JLS != nil && options.TLS.JLS.Enabled {
+		options.TLS.JLS.UseQuic = true
+		jls = options.TLS.JLS
+	}
 	tlsConfig, err := tls.NewClient(ctx, options.Server, common.PtrValueOrDefault(options.TLS))
 	if err != nil {
 		return nil, err
@@ -73,6 +78,7 @@ func NewTUIC(ctx context.Context, router adapter.Router, logger log.ContextLogge
 		UDPStream:         tuicUDPStream,
 		ZeroRTTHandshake:  options.ZeroRTTHandshake,
 		Heartbeat:         time.Duration(options.Heartbeat),
+		JLS:               jls,
 	})
 	if err != nil {
 		return nil, err

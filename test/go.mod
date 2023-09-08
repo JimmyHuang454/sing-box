@@ -6,6 +6,8 @@ require github.com/sagernet/sing-box v0.0.0
 
 replace github.com/sagernet/sing-box => ../
 
+replace github.com/JimmyHuang454/JLS-go => ../../jls-go
+
 replace github.com/sagernet/quic-go v0.0.0-20230831052420-45809eee2e86 => github.com/JimmyHuang454/quic-go v0.0.0-20230907171826-f1f9915a9a81
 
 require (
