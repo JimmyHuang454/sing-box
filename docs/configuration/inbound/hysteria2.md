@@ -25,10 +25,6 @@
 }
 ```
 
-!!! warning "Compatibility issues with the official client"
-
-    The use case of `fastOpen=false` or UDP MTU >= 1200 is not supported when using the official client.
-
 !!! warning ""
 
     QUIC, which is required by Hysteria2 is not included by default, see [Installation](/#installation).

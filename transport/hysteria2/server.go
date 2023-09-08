@@ -69,7 +69,6 @@ type Server struct {
 func NewServer(options ServerOptions) (*Server, error) {
 	quicConfig := &quic.Config{
 		DisablePathMTUDiscovery:        !(runtime.GOOS == "windows" || runtime.GOOS == "linux" || runtime.GOOS == "android" || runtime.GOOS == "darwin"),
-		MaxDatagramFrameSize:           1400,
 		EnableDatagrams:                !options.UDPDisabled,
 		MaxIncomingStreams:             1 << 60,
 		InitialStreamReceiveWindow:     defaultStreamReceiveWindow,
@@ -297,6 +296,16 @@ func (c *serverConn) HandshakeFailure(err error) error {
 	}
 	c.responseWritten = true
 	buffer := protocol.WriteTCPResponse(false, err.Error(), nil)
+	defer buffer.Release()
+	return common.Error(c.Stream.Write(buffer.Bytes()))
+}
+
+func (c *serverConn) HandshakeSuccess() error {
+	if c.responseWritten {
+		return nil
+	}
+	c.responseWritten = true
+	buffer := protocol.WriteTCPResponse(true, "", nil)
 	defer buffer.Release()
 	return common.Error(c.Stream.Write(buffer.Bytes()))
 }
