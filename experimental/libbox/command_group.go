@@ -27,19 +27,6 @@ func (g *OutboundGroup) GetItems() OutboundGroupItemIterator {
 	return newIterator(g.items)
 }
 
-func (g *OutboundGroup) IsExpand() bool {
-	switch g.isExpand {
-	case -1:
-		return g.Selectable
-	case 0:
-		return false
-	case 1:
-		return true
-	default:
-		panic("unexpected expand value")
-	}
-}
-
 type OutboundGroupIterator interface {
 	Next() *OutboundGroup
 	HasNext() bool
