@@ -1,3 +1,5 @@
+//go:build with_quic
+
 package tuic
 
 import (
@@ -35,7 +37,7 @@ func (s *serverSession) handleMessage(data []byte) error {
 	}
 	switch data[1] {
 	case CommandPacket:
-		message := udpMessagePool.Get().(*udpMessage)
+		message := allocMessage()
 		err := decodeUDPMessage(message, data[2:])
 		if err != nil {
 			message.release()

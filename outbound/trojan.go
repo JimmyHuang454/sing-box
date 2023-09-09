@@ -51,7 +51,11 @@ func NewTrojan(ctx context.Context, router adapter.Router, logger log.ContextLog
 		key:        trojan.Key(options.Password),
 	}
 	if options.TLS != nil {
-		outbound.tlsConfig, err = tls.NewClient(router, options.Server, common.PtrValueOrDefault(options.TLS))
+		if options.Transport != nil && options.Transport.Type == "quic" && (options.TLS.JLS != nil && options.TLS.JLS.Enabled) {
+			options.TLS.JLS.UseQuic = true
+			options.Transport.QUICOptions.JLS = options.TLS.JLS
+		}
+		outbound.tlsConfig, err = tls.NewClient(ctx, options.Server, common.PtrValueOrDefault(options.TLS))
 		if err != nil {
 			return nil, err
 		}

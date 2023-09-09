@@ -17,6 +17,7 @@ builds:
       - with_quic
       - with_dhcp
       - with_wireguard
+      - with_ech
       - with_utls
       - with_reality_server
       - with_clash_api
@@ -53,7 +54,9 @@ builds:
   #     - with_quic
   #     - with_dhcp
   #     - with_wireguard
+  #     - with_ech
   #     - with_utls
+  #     - with_grpc
   #     - with_clash_api
   #   env:
   #     - CGO_ENABLED=1

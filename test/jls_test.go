@@ -8,7 +8,7 @@ import (
 	"github.com/sagernet/sing-box/option"
 )
 
-func TestJLS(t *testing.T) {
+func TestJLSTCP(t *testing.T) {
 	startInstance(t, option.Options{
 		Inbounds: []option.Inbound{
 			{
@@ -36,8 +36,8 @@ func TestJLS(t *testing.T) {
 					},
 					TLS: &option.InboundTLSOptions{
 						Enabled:    true,
-						ServerName: "example.org",
-						JLS:        &option.JLSOptions{Enabled: true, IV: "abc", Password: "abc"},
+						ServerName: "www.apple.com",
+						JLS:        &option.JLSOptions{Enabled: true, IV: "123", Password: "abc"},
 					},
 				},
 			},
@@ -57,8 +57,8 @@ func TestJLS(t *testing.T) {
 					Password: "password",
 					TLS: &option.OutboundTLSOptions{
 						Enabled:    true,
-						ServerName: "example.org",
-						JLS:        &option.JLSOptions{Enabled: true, IV: "abc", Password: "abc"},
+						ServerName: "www.apple.com",
+						JLS:        &option.JLSOptions{Enabled: true, IV: "123", Password: "abc"},
 					},
 				},
 			},

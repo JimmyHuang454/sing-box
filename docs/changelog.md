@@ -1,3 +1,86 @@
+#### 1.5.0-beta.5
+
+* Fixes and improvements
+
+#### 1.5.0-beta.4
+
+* Fixes and improvements
+
+#### 1.5.0-beta.3
+
+* Fixes and improvements
+* Updated Hysteria2 documentation **1**
+
+**1**:
+
+Added notes indicating compatibility issues with origin Hysteria2
+servers and clients when using `fastOpen=false` or UDP MTU >= 1200.
+=======
+Added notes indicating compatibility issues with the official
+Hysteria2 server and client when using `fastOpen=false` or UDP MTU >= 1200.
+
+#### 1.5.0-beta.2
+
+* Add hysteria2 protocol support **1**
+* Fixes and improvements
+
+**1**:
+
+See [Hysteria2 inbound](/configuration/inbound/hysteria2) and [Hysteria2 outbound](/configuration/outbound/hysteria2)
+
+For protocol description, please refer to [https://v2.hysteria.network](https://v2.hysteria.network)
+
+#### 1.5.0-beta.1
+
+* Add TLS [ECH server](/configuration/shared/tls) support
+* Improve TLS TCH client configuration
+* Add TLS ECH key pair generator **1**
+* Add TLS ECH support for QUIC based protocols **2**
+* Add KDE support for the `set_system_proxy` option in HTTP inbound
+
+**1**:
+
+Command: `sing-box generate ech-keypair <plain_server_name> [-pq-signature-schemes-enabled]`
+
+**2**:
+
+All inbounds and outbounds are supported, including `Naiveproxy`, `Hysteria`, `TUIC` and `V2ray QUIC transport`.
+
+#### 1.4.1
+
+* Fixes and improvements
+
+#### 1.4.0
+
+* Fix bugs and update dependencies
+
+Important changes since 1.3:
+
+* Add TUIC support **1**
+* Add `udp_over_stream` option for TUIC client **2**
+* Add MultiPath TCP support **3**
+* Add `include_interface` and `exclude_interface` options for tun inbound
+* Pause recurring tasks when no network or device idle
+* Improve Android and Apple platform clients
+
+*1*:
+
+See [TUIC inbound](/configuration/inbound/tuic)
+and [TUIC outbound](/configuration/outbound/tuic)
+
+**2**:
+
+This is the TUIC port of the [UDP over TCP protocol](/configuration/shared/udp-over-tcp), designed to provide a QUIC
+stream based UDP relay mode that TUIC does not provide. Since it is an add-on protocol, you will need to use sing-box or
+another program compatible with the protocol as a server.
+
+This mode has no positive effect in a proper UDP proxy scenario and should only be applied to relay streaming UDP
+traffic (basically QUIC streams).
+
+*3*:
+
+Requires sing-box to be compiled with Go 1.21.
+
 #### 1.4.0-rc.3
 
 * Fixes and improvements

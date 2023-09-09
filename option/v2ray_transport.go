@@ -76,7 +76,9 @@ type V2RayWebsocketOptions struct {
 	EarlyDataHeaderName string                      `json:"early_data_header_name,omitempty"`
 }
 
-type V2RayQUICOptions struct{}
+type V2RayQUICOptions struct {
+	JLS *JLSOptions `json:"jls,omitempty"`
+}
 
 type V2RayGRPCOptions struct {
 	ServiceName         string   `json:"service_name,omitempty"`

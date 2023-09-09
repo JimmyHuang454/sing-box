@@ -1,9 +1,10 @@
+//go:build with_quic
+
 package tuic
 
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
 	"encoding/binary"
 	"io"
 	"net"
@@ -13,9 +14,12 @@ import (
 	"time"
 
 	"github.com/sagernet/quic-go"
-	"github.com/sagernet/sing-box/common/baderror"
+	"github.com/sagernet/sing-box/common/qtls"
+	"github.com/sagernet/sing-box/common/tls"
+	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/auth"
+	"github.com/sagernet/sing/common/baderror"
 	"github.com/sagernet/sing/common/buf"
 	"github.com/sagernet/sing/common/bufio"
 	E "github.com/sagernet/sing/common/exceptions"
@@ -29,13 +33,15 @@ import (
 type ServerOptions struct {
 	Context           context.Context
 	Logger            logger.Logger
-	TLSConfig         *tls.Config
+	TLSConfig         tls.ServerConfig
 	Users             []User
 	CongestionControl string
 	AuthTimeout       time.Duration
 	ZeroRTTHandshake  bool
 	Heartbeat         time.Duration
 	Handler           ServerHandler
+
+	JLS               *option.JLSOptions
 }
 
 type User struct {
@@ -52,7 +58,7 @@ type ServerHandler interface {
 type Server struct {
 	ctx               context.Context
 	logger            logger.Logger
-	tlsConfig         *tls.Config
+	tlsConfig         tls.ServerConfig
 	heartbeat         time.Duration
 	quicConfig        *quic.Config
 	userMap           map[uuid.UUID]User
@@ -77,6 +83,11 @@ func NewServer(options ServerOptions) (*Server, error) {
 		Allow0RTT:               options.ZeroRTTHandshake,
 		MaxIncomingStreams:      1 << 60,
 		MaxIncomingUniStreams:   1 << 60,
+	}
+	if options.JLS != nil && options.JLS.Enabled {
+		quicConfig.UseJLS = true
+		quicConfig.JLSIV = []byte(options.JLS.IV)
+		quicConfig.JLSPWD = []byte(options.JLS.Password)
 	}
 	switch options.CongestionControl {
 	case "":
@@ -107,7 +118,7 @@ func NewServer(options ServerOptions) (*Server, error) {
 
 func (s *Server) Start(conn net.PacketConn) error {
 	if !s.quicConfig.Allow0RTT {
-		listener, err := quic.Listen(conn, s.tlsConfig, s.quicConfig)
+		listener, err := qtls.Listen(conn, s.tlsConfig, s.quicConfig)
 		if err != nil {
 			return err
 		}
@@ -127,7 +138,7 @@ func (s *Server) Start(conn net.PacketConn) error {
 			}
 		}()
 	} else {
-		listener, err := quic.ListenEarly(conn, s.tlsConfig, s.quicConfig)
+		listener, err := qtls.ListenEarly(conn, s.tlsConfig, s.quicConfig)
 		if err != nil {
 			return err
 		}
@@ -247,7 +258,7 @@ func (s *serverSession) handleUniStream(stream quic.ReceiveStream) error {
 		if !loaded {
 			return E.New("authentication: unknown user ", userUUID)
 		}
-		handshakeState := s.quicConn.ConnectionState().TLS
+		handshakeState := s.quicConn.ConnectionState()
 		tuicToken, err := handshakeState.ExportKeyingMaterial(string(user.UUID[:]), []byte(user.Password), 32)
 		if err != nil {
 			return E.Cause(err, "authentication: export keying material")
@@ -264,7 +275,7 @@ func (s *serverSession) handleUniStream(stream quic.ReceiveStream) error {
 			return s.connErr
 		case <-s.authDone:
 		}
-		message := udpMessagePool.Get().(*udpMessage)
+		message := allocMessage()
 		err = readUDPMessage(message, io.MultiReader(bytes.NewReader(buffer.From(2)), stream))
 		if err != nil {
 			message.release()

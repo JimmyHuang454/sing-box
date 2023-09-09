@@ -82,7 +82,7 @@ type Router struct {
 	interfaceMonitor                   tun.DefaultInterfaceMonitor
 	packageManager                     tun.PackageManager
 	processSearcher                    process.Searcher
-	timeService                        adapter.TimeService
+	timeService                        *ntp.Service
 	pauseManager                       pause.Manager
 	clashServer                        adapter.ClashServer
 	v2rayServer                        adapter.V2RayServer
@@ -523,7 +523,7 @@ func (r *Router) Close() error {
 			return E.Cause(err, "close dns transport[", i, "]")
 		})
 	}
-	if r.geositeReader != nil {
+	if r.geoIPReader != nil {
 		r.logger.Trace("closing geoip reader")
 		err = E.Append(err, common.Close(r.geoIPReader), func(err error) error {
 			return E.Cause(err, "close geoip reader")
@@ -702,6 +702,9 @@ func (r *Router) RouteConnection(ctx context.Context, conn net.Conn, metadata ad
 	if !common.Contains(detour.Network(), N.NetworkTCP) {
 		return E.New("missing supported outbound, closing connection")
 	}
+	if !metadata.Destination.IsValid() && len(metadata.DestinationAddresses) == 0 {
+		return E.New("invalid destination address")
+	}
 	if r.clashServer != nil {
 		trackerConn, tracker := r.clashServer.RoutedConnection(ctx, conn, metadata, matchedRule)
 		defer tracker.Leave()
@@ -813,6 +816,9 @@ func (r *Router) RoutePacketConnection(ctx context.Context, conn N.PacketConn, m
 	}
 	if !common.Contains(detour.Network(), N.NetworkUDP) {
 		return E.New("missing supported outbound, closing packet connection")
+	}
+	if !metadata.Destination.IsValid() && len(metadata.DestinationAddresses) == 0 {
+		return E.New("invalid destination address")
 	}
 	if r.clashServer != nil {
 		trackerConn, tracker := r.clashServer.RoutedPacketConnection(ctx, conn, metadata, matchedRule)
@@ -950,13 +956,6 @@ func (r *Router) InterfaceMonitor() tun.DefaultInterfaceMonitor {
 
 func (r *Router) PackageManager() tun.PackageManager {
 	return r.packageManager
-}
-
-func (r *Router) TimeFunc() func() time.Time {
-	if r.timeService == nil {
-		return nil
-	}
-	return r.timeService.TimeFunc()
 }
 
 func (r *Router) ClashServer() adapter.ClashServer {

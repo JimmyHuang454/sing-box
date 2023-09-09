@@ -2,52 +2,47 @@
   "log": {
     "level": "fatal"
   },
-  "dns": {
-    "servers": [{
-      "address": "udp://8.8.8.8"
-    }]
-  },
   "inbounds": [{
     "type": "trojan",
     "listen": "0.0.0.0",
-    "tag": "trojanIn",
+    "tag": "trojan",
     "listen_port": 443,
-    "network": "tcp",
+    "users": [{
+      "password": "password"
+    }],
     "tls": {
       "enabled": true,
-      "server_name": "www.gov.hk",
+      "server_name": "www.jsdelivr.com",
+      "alpn": ["h2"],
       "jls": {
         "enabled": true,
         "password": "123456",
         "random": "abcabc"
       }
-    },
+    }
+  }, {
+    "type": "tuic",
+    "tag": "tuic",
+    "listen": "0.0.0.0",
+    "listen_port": 443,
     "users": [{
-      "name": "abcd",
-      "password": "abcd"
-    }]
+      "uuid": "2DD61D93-75D8-4DA4-AC0E-6AECE7EAC365",
+      "password": "password"
+    }],
+    "congestion_control": "bbr",
+    "tls": {
+      "enabled": true,
+      "server_name": "www.jsdelivr.com",
+      "alpn": ["h2", "h3"],
+      "jls": {
+        "enabled": true,
+        "password": "123456",
+        "random": "abcabc"
+      }
+    }
   }],
   "outbounds": [{
-      "type": "direct",
-      "tag": "freedom"
-    },
-    {
-      "type": "dns",
-      "tag": "dns-out"
-    }
-  ],
-  "route": {
-    "auto_detect_interface": true,
-    "rules": [{
-        "inbound": [
-          "trojanIn"
-        ],
-        "outbound": "freedom"
-      },
-      {
-        "protocol": "dns",
-        "outbound": "dns-out"
-      }
-    ]
-  }
+    "type": "direct",
+    "tag": "freedom"
+  }]
 }
