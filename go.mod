@@ -64,7 +64,7 @@ replace github.com/sagernet/quic-go v0.0.0-20230831052420-45809eee2e86 => github
 
 require (
 	github.com/Dreamacro/protobytes v0.0.0-20230617041236-6500a9f4f158 // indirect
-	github.com/JimmyHuang454/qtls-go1-20-JLS v0.0.0-20230907013506-e0f84291d2e9 // indirect
+	github.com/JimmyHuang454/qtls-go1-20-JLS v0.0.0-20230909050831-219b978e3919 // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

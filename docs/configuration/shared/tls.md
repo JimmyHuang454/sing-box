@@ -399,5 +399,3 @@ Check disabled if empty.
 ### Reload
 
 For server configuration, certificate, key and ECH key will be automatically reloaded if modified.
-=======
-For server configuration, certificate, key and ECH key will be automatically reloaded if modified.

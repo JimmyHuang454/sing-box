@@ -1,3 +1,9 @@
+#### 1.5.0-beta.6
+
+* Fix compatibility issues with official Hysteria2 server and client
+* Fixes and improvements
+* Mark [deprecated features](/deprecated)
+
 #### 1.5.0-beta.5
 
 * Fixes and improvements
@@ -13,9 +19,6 @@
 
 **1**:
 
-Added notes indicating compatibility issues with origin Hysteria2
-servers and clients when using `fastOpen=false` or UDP MTU >= 1200.
-=======
 Added notes indicating compatibility issues with the official
 Hysteria2 server and client when using `fastOpen=false` or UDP MTU >= 1200.
 

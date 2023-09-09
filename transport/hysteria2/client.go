@@ -103,7 +103,7 @@ func (c *Client) offer(ctx context.Context) (*clientQUICConnection, error) {
 }
 
 func (c *Client) offerNew(ctx context.Context) (*clientQUICConnection, error) {
-	udpConn, err := c.dialer.DialContext(ctx, "udp", c.serverAddr)
+	udpConn, err := c.dialer.DialContext(c.ctx, "udp", c.serverAddr)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func (c *Client) offerNew(ctx context.Context) (*clientQUICConnection, error) {
 		Header: make(http.Header),
 	}
 	protocol.AuthRequestToHeader(request.Header, protocol.AuthRequest{Auth: c.password, Rx: c.receiveBPS})
-	response, err := http3Transport.RoundTrip(request)
+	response, err := http3Transport.RoundTrip(request.WithContext(ctx))
 	if err != nil {
 		if quicConn != nil {
 			quicConn.CloseWithError(0, "")

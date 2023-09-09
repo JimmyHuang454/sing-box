@@ -115,6 +115,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/quic-go/qpack v0.4.0 h1:Cr9BXA1sQS2SmDUWjSofMPNKmvF6IiIfDRmgU0w1ZCo=
 github.com/quic-go/qpack v0.4.0/go.mod h1:UZVnYIfi5GRk+zI9UMaCPsmZ2xKJP7XBUvVyT1Knj9A=
+github.com/quic-go/qtls-go1-20 v0.3.3 h1:17/glZSLI9P9fDAeyCHBFSWSqJcwx1byhLwP5eUIDCM=
+github.com/quic-go/qtls-go1-20 v0.3.3/go.mod h1:X9Nh97ZL80Z+bX/gUXMbipO6OxdiDi58b/fMC9mAL+k=
 github.com/sagernet/cloudflare-tls v0.0.0-20230829051644-4a68352d0c4a h1:wZHruBxZCsQLXHAozWpnJBL3wJ/XufDpz0qKtgpSnA4=
 github.com/sagernet/cloudflare-tls v0.0.0-20230829051644-4a68352d0c4a/go.mod h1:dNV1ZP9y3qx5ltULeKaQZTZWTLHflgW5DES+Ses7cMI=
 github.com/sagernet/go-tun2socks v1.16.12-0.20220818015926-16cb67876a61 h1:5+m7c6AkmAylhauulqN/c5dnh8/KssrE9c93TQrXldA=
@@ -123,6 +125,9 @@ github.com/sagernet/gvisor v0.0.0-20230627031050-1ab0276e0dd2 h1:dnkKrzapqtAwjTS
 github.com/sagernet/gvisor v0.0.0-20230627031050-1ab0276e0dd2/go.mod h1:1JUiV7nGuf++YFm9eWZ8q2lrwHmhcUGzptMl/vL1+LA=
 github.com/sagernet/netlink v0.0.0-20220905062125-8043b4a9aa97 h1:iL5gZI3uFp0X6EslacyapiRz7LLSJyr4RajF/BhMVyE=
 github.com/sagernet/netlink v0.0.0-20220905062125-8043b4a9aa97/go.mod h1:xLnfdiJbSp8rNqYEdIW/6eDO4mVoogml14Bh2hSiFpM=
+github.com/sagernet/quic-go v0.0.0-20230825040534-0cd917b2ddda h1:7J/hnOFqCThiCrVpvr0wKO+Dic/XPSulPr5yI8FVJMs=
+github.com/sagernet/quic-go v0.0.0-20230825040534-0cd917b2ddda/go.mod h1:Iw8Tt3dMqC/61cMHa0nN5i/958oYuuMnQCMOSPx+xcg=
+github.com/sagernet/quic-go v0.0.0-20230831052420-45809eee2e86/go.mod h1:O4Cj7TmMOvqD6S0XMqJRZfcYzA3m0H0ARbbaJFB0p7A=
 github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691 h1:5Th31OC6yj8byLGkEnIYp6grlXfo1QYUfiYFGjewIdc=
 github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691/go.mod h1:B8lp4WkQ1PwNnrVMM6KyuFR20pU8jYBD+A4EhJovEXU=
 github.com/sagernet/sing v0.0.0-20220817130738-ce854cda8522/go.mod h1:QVsS5L/ZA2Q5UhQwLrn0Trw+msNd/NPGEhBKR/ioWiY=
