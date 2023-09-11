@@ -66,6 +66,7 @@ type DefaultDNSRule struct {
 	DomainRegex     Listable[string]       `json:"domain_regex,omitempty"`
 	Geosite         Listable[string]       `json:"geosite,omitempty"`
 	SourceGeoIP     Listable[string]       `json:"source_geoip,omitempty"`
+	ExpectGeoIP     Listable[string]       `json:"expect_ip,omitempty"`
 	SourceIPCIDR    Listable[string]       `json:"source_ip_cidr,omitempty"`
 	SourcePort      Listable[uint16]       `json:"source_port,omitempty"`
 	SourcePortRange Listable[string]       `json:"source_port_range,omitempty"`

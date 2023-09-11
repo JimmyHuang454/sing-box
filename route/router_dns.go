@@ -42,6 +42,8 @@ func (r *Router) matchDNS(ctx context.Context) (context.Context, dns.Transport, 
 	if metadata == nil {
 		panic("no context")
 	}
+	resTransport := r.defaultTransport
+	resDomainStrategy := dns.DomainStrategyAsIS
 	for i, rule := range r.dnsRules {
 		if rule.Match(metadata) {
 			detour := rule.Outbound()
@@ -60,18 +62,19 @@ func (r *Router) matchDNS(ctx context.Context) (context.Context, dns.Transport, 
 			if rewriteTTL := rule.RewriteTTL(); rewriteTTL != nil {
 				ctx = dns.ContextWithRewriteTTL(ctx, *rewriteTTL)
 			}
-			if domainStrategy, dsLoaded := r.transportDomainStrategy[transport]; dsLoaded {
-				return ctx, transport, domainStrategy
-			} else {
-				return ctx, transport, dns.DomainStrategyAsIS
-			}
+			resTransport = transport
+			metadata.MatchedDNSRule = &rule
+			break
 		}
 	}
 	if domainStrategy, dsLoaded := r.transportDomainStrategy[r.defaultTransport]; dsLoaded {
-		return ctx, r.defaultTransport, domainStrategy
-	} else {
-		return ctx, r.defaultTransport, dns.DomainStrategyAsIS
+		resDomainStrategy = domainStrategy
 	}
+	return ctx, resTransport, resDomainStrategy
+}
+
+func (r *Router) ExpectIP() bool {
+	return true
 }
 
 func (r *Router) Exchange(ctx context.Context, message *mDNS.Msg) (*mDNS.Msg, error) {

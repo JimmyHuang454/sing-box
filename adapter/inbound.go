@@ -37,7 +37,6 @@ type InboundContext struct {
 	Outbound    string
 
 	// cache
-
 	InboundDetour        string
 	LastInbound          string
 	OriginDestination    M.Socksaddr
@@ -49,8 +48,8 @@ type InboundContext struct {
 	FakeIP               bool
 
 	// dns cache
-
-	QueryType uint16
+	MatchedDNSRule *DNSRule
+	QueryType      uint16
 }
 
 type inboundContextKey struct{}
