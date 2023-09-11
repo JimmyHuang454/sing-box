@@ -80,4 +80,8 @@ HTTP3 服务器认证失败时的行为。
 
 ==必填==
 
+<<<<<<< HEAD
 TLS 配置, 参阅 [TLS](/zh/configuration/shared/tls/#inbound)。
+=======
+TLS 配置, 参阅 [TLS](/zh/configuration/shared/tls/#inbound)。
+>>>>>>> 90957564eb0522fb785eb2955c7cea3716e68a45
