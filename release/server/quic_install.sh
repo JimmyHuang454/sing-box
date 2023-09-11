@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-
 # bash <(curl https://raw.githubusercontent.com/JimmyHuang454/sing-box/dev-next/release/server/quic_install.sh)
+
 quit(){
   echo ""
   echo "Failed:"
@@ -44,7 +44,7 @@ sudo systemctl stop sing-box
 
 download_lastest_singbox_to $SAVE_PATH
 
-if InstallType=="deb"; then
+if $InstallType=="deb"; then
   sudo apt remove sing-box
   if ! sudo apt install $SAVE_PATH; then
     quit "Failed to install by apt."
