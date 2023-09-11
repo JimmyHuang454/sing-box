@@ -2,6 +2,13 @@ module github.com/sagernet/sing-box
 
 go 1.20
 
+replace github.com/sagernet/quic-go v0.0.0-20230911082307-390b7c274032 => github.com/JimmyHuang454/quic-go v0.0.0-20230911111950-cfa4b79686d0
+
+//replace github.com/sagernet/quic-go => ../quic-go
+//replace github.com/JimmyHuang454/qtls-go1-20-JLS => ../qtls-go1-20-JLS
+
+//replace github.com/sagernet/sing => ../sing
+
 require (
 	berty.tech/go-libtor v1.0.385
 	github.com/Dreamacro/clash v1.17.0
@@ -25,7 +32,7 @@ require (
 	github.com/sagernet/cloudflare-tls v0.0.0-20230829051644-4a68352d0c4a
 	github.com/sagernet/gomobile v0.0.0-20230728014906-3de089147f59
 	github.com/sagernet/gvisor v0.0.0-20230627031050-1ab0276e0dd2
-	github.com/sagernet/quic-go v0.0.0-20230831052420-45809eee2e86
+	github.com/sagernet/quic-go v0.0.0-20230911082307-390b7c274032
 	github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691
 	github.com/sagernet/sing v0.2.10-0.20230908032232-b0849c43a600
 	github.com/sagernet/sing-dns v0.1.9-0.20230824120133-4d5cbceb40c1
@@ -54,13 +61,6 @@ require (
 	google.golang.org/protobuf v1.31.0
 	howett.net/plist v1.0.0
 )
-
-replace github.com/sagernet/quic-go v0.0.0-20230831052420-45809eee2e86 => github.com/JimmyHuang454/quic-go v0.0.0-20230908043436-7734ec985389
-
-//replace github.com/sagernet/quic-go => ../quic-go
-//replace github.com/JimmyHuang454/qtls-go1-20-JLS => ../qtls-go1-20-JLS
-
-//replace github.com/sagernet/sing => ../sing
 
 require (
 	github.com/Dreamacro/protobytes v0.0.0-20230617041236-6500a9f4f158 // indirect
