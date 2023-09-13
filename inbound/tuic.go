@@ -12,6 +12,7 @@ import (
 	C "github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/log"
 	"github.com/sagernet/sing-box/option"
+	"github.com/sagernet/sing-quic"
 	"github.com/sagernet/sing-quic/tuic"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/auth"
@@ -34,11 +35,16 @@ func NewTUIC(ctx context.Context, router adapter.Router, logger log.ContextLogge
 	if options.TLS == nil || !options.TLS.Enabled {
 		return nil, C.ErrTLSRequired
 	}
-	jls := &option.JLSOptions{Enabled: false}
+
+	jls := &qtls.JLSOptions{Enabled: false}
 	if options.TLS.JLS != nil && options.TLS.JLS.Enabled {
 		options.TLS.JLS.UseQuic = true
-		jls = options.TLS.JLS
+		jls.Enabled = true
+		jls.IV = []byte(options.TLS.JLS.IV)
+		jls.PWD = []byte(options.TLS.JLS.Password)
+		jls.FallbackURL = options.TLS.JLS.FallbackURL
 	}
+
 	tlsConfig, err := tls.NewServer(ctx, logger, common.PtrValueOrDefault(options.TLS))
 	if err != nil {
 		return nil, err

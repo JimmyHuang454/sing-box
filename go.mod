@@ -4,7 +4,9 @@ go 1.20
 
 replace github.com/sagernet/quic-go v0.0.0-20230911082307-390b7c274032 => github.com/JimmyHuang454/quic-go v0.0.0-20230911111950-cfa4b79686d0
 
+replace github.com/sagernet/sing-quic v0.0.0-20230912130846-98205e7e798c => github.com/JimmyHuang454/sing-quic v0.0.0-20230913083640-56fc751d309c
 //replace github.com/sagernet/quic-go => ../quic-go
+//replace github.com/sagernet/sing-quic => ../sing-quic
 //replace github.com/JimmyHuang454/qtls-go1-20-JLS => ../qtls-go1-20-JLS
 
 //replace github.com/sagernet/sing => ../sing
@@ -73,7 +75,7 @@ require (
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/btree v1.1.2 // indirect
-	github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38 // indirect
+	github.com/google/pprof v0.0.0-20230912144702-c363fe2c2ed8 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/josharian/native v1.1.0 // indirect

@@ -10,6 +10,10 @@ github.com/JimmyHuang454/qtls-go1-20-JLS v0.0.0-20230909050831-219b978e3919 h1:v
 github.com/JimmyHuang454/qtls-go1-20-JLS v0.0.0-20230909050831-219b978e3919/go.mod h1:OFRBykuJ6qGCLprg7Hgk/JKvf2VPK2mz4LexbsI9eTg=
 github.com/JimmyHuang454/quic-go v0.0.0-20230911111950-cfa4b79686d0 h1:oJG1cwDEkMgp4eo3wOe5mXxlXCIYYUtwUc+eaDZWOS0=
 github.com/JimmyHuang454/quic-go v0.0.0-20230911111950-cfa4b79686d0/go.mod h1:CZXWjaaLnag9hLecR2ex39R6jf/I5lCgfcNs+CQnoE0=
+github.com/JimmyHuang454/sing-quic v0.0.0-20230913053520-26ef2f81520e h1:JggX3cyiVSkf85yQQPBq0q8NRLs3v/Q3Qc5wRIyVj20=
+github.com/JimmyHuang454/sing-quic v0.0.0-20230913053520-26ef2f81520e/go.mod h1:7GQQeST77nz+H4zVJknlgTVI3iue3e8e7OcCHELGQhw=
+github.com/JimmyHuang454/sing-quic v0.0.0-20230913083640-56fc751d309c h1:hoNFI3bdXuYKh9s7mG5mO/4W8p/zY4b0D5I8QMbagas=
+github.com/JimmyHuang454/sing-quic v0.0.0-20230913083640-56fc751d309c/go.mod h1:BZUKRIwWwCvt8tMVU382DpLXwGiDvLSD4n/45tmPzRU=
 github.com/ajg/form v1.5.1 h1:t9c7v8JUKu/XxOGBU0yjNpaMloxGEJhUkqFRq0ibGeU=
 github.com/ajg/form v1.5.1/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
 github.com/andybalholm/brotli v1.0.5 h1:8uQZIdzKmjc/iuPu7O2ioW48L81FgatrcpfFmiq/cCs=
@@ -55,6 +59,8 @@ github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
 github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
 github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38 h1:yAJXTCF9TqKcTiHJAE8dj7HMvPfh66eeA2JYW7eFpSE=
 github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38/go.mod h1:kpwsk12EmLew5upagYY7GY0pfYCcupk39gWOCRROcvE=
+github.com/google/pprof v0.0.0-20230912144702-c363fe2c2ed8 h1:gpptm606MZYGaMHMsB4Srmb6EbW/IVHnt04rcMXnkBQ=
+github.com/google/pprof v0.0.0-20230912144702-c363fe2c2ed8/go.mod h1:czg5+yv1E0ZGTi6S6vVK1mke0fV+FaUhNGcd6VRS9Ik=
 github.com/hashicorp/yamux v0.1.1 h1:yrQxtgseBDrq9Y652vSRDvsKCJKOUD+GzTS4Y0Y8pvE=
 github.com/hashicorp/yamux v0.1.1/go.mod h1:CtWFDAQgb7dxtzFs4tWbplKIe2jSi3+5vKbgIO0SLnQ=
 github.com/ianlancetaylor/demangle v0.0.0-20200824232613-28f6c0f3b639/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=

@@ -53,9 +53,11 @@ func NewHysteria(ctx context.Context, router adapter.Router, logger log.ContextL
 	if options.TLS == nil || !options.TLS.Enabled {
 		return nil, C.ErrTLSRequired
 	}
+
 	if options.TLS.JLS != nil && options.TLS.JLS.Enabled {
 		options.TLS.JLS.UseQuic = true
 	}
+
 	tlsConfig, err := tls.NewClient(ctx, options.Server, common.PtrValueOrDefault(options.TLS))
 	if err != nil {
 		return nil, err
@@ -76,7 +78,9 @@ func NewHysteria(ctx context.Context, router adapter.Router, logger log.ContextL
 		quicConfig.UseJLS = true
 		quicConfig.JLSIV = []byte(options.TLS.JLS.IV)
 		quicConfig.JLSPWD = []byte(options.TLS.JLS.Password)
+		quicConfig.FallbackURL = options.TLS.JLS.FallbackURL
 	}
+
 	if options.ReceiveWindowConn == 0 {
 		quicConfig.InitialStreamReceiveWindow = hysteria.DefaultStreamReceiveWindow
 		quicConfig.MaxStreamReceiveWindow = hysteria.DefaultStreamReceiveWindow
