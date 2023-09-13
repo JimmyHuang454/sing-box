@@ -45,27 +45,28 @@ func (r *Router) matchDNS(ctx context.Context) (context.Context, dns.Transport, 
 	resTransport := r.defaultTransport
 	resDomainStrategy := dns.DomainStrategyAsIS
 	for i, rule := range r.dnsRules {
-		if rule.Match(metadata) {
-			detour := rule.Outbound()
-			transport, loaded := r.transportMap[detour]
-			if !loaded {
-				r.dnsLogger.ErrorContext(ctx, "transport not found: ", detour)
-				continue
-			}
-			if _, isFakeIP := transport.(adapter.FakeIPTransport); isFakeIP && metadata.FakeIP {
-				continue
-			}
-			r.dnsLogger.DebugContext(ctx, "match[", i, "] ", rule.String(), " => ", detour)
-			if rule.DisableCache() {
-				ctx = dns.ContextWithDisableCache(ctx, true)
-			}
-			if rewriteTTL := rule.RewriteTTL(); rewriteTTL != nil {
-				ctx = dns.ContextWithRewriteTTL(ctx, *rewriteTTL)
-			}
-			resTransport = transport
-			metadata.MatchedDNSRule = &rule
-			break
+		if !rule.Match(metadata) {
+			continue
 		}
+		detour := rule.Outbound()
+		transport, loaded := r.transportMap[detour]
+		if !loaded {
+			r.dnsLogger.ErrorContext(ctx, "transport not found: ", detour)
+			continue
+		}
+		if _, isFakeIP := transport.(adapter.FakeIPTransport); isFakeIP && metadata.FakeIP {
+			continue
+		}
+		r.dnsLogger.DebugContext(ctx, "match[", i, "] ", rule.String(), " => ", detour)
+		if rule.DisableCache() {
+			ctx = dns.ContextWithDisableCache(ctx, true)
+		}
+		if rewriteTTL := rule.RewriteTTL(); rewriteTTL != nil {
+			ctx = dns.ContextWithRewriteTTL(ctx, *rewriteTTL)
+		}
+		resTransport = transport
+		metadata.MatchedDNSRule = &rule
+		break
 	}
 	if domainStrategy, dsLoaded := r.transportDomainStrategy[r.defaultTransport]; dsLoaded {
 		resDomainStrategy = domainStrategy
@@ -75,6 +76,14 @@ func (r *Router) matchDNS(ctx context.Context) (context.Context, dns.Transport, 
 
 func (r *Router) ExpectIP() bool {
 	return true
+}
+
+func (r *Router) ExchangeWithoutCache(ctx context.Context, message *mDNS.Msg) (*mDNS.Msg, error) {
+	ctx, transport, strategy := r.matchDNS(ctx)
+	ctx, cancel := context.WithTimeout(ctx, C.DNSTimeout)
+	defer cancel()
+	response, err := r.dnsClient.Exchange(ctx, transport, message, strategy)
+	return response, err
 }
 
 func (r *Router) Exchange(ctx context.Context, message *mDNS.Msg) (*mDNS.Msg, error) {
@@ -99,10 +108,7 @@ func (r *Router) Exchange(ctx context.Context, message *mDNS.Msg) (*mDNS.Msg, er
 			}
 			metadata.Domain = fqdnToDomain(message.Question[0].Name)
 		}
-		ctx, transport, strategy := r.matchDNS(ctx)
-		ctx, cancel := context.WithTimeout(ctx, C.DNSTimeout)
-		defer cancel()
-		response, err = r.dnsClient.Exchange(ctx, transport, message, strategy)
+		response, err = r.ExchangeWithoutCache(ctx, message)
 		if err != nil && len(message.Question) > 0 {
 			r.dnsLogger.ErrorContext(ctx, E.Cause(err, "exchange failed for ", formatQuestion(message.Question[0].String())))
 		}

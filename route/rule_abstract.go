@@ -17,6 +17,7 @@ type abstractDefaultRule struct {
 	destinationPortItems    []RuleItem
 	allItems                []RuleItem
 	invert                  bool
+	hasExpectIP             bool
 	outbound                string
 }
 

@@ -74,6 +74,7 @@ type Rule interface {
 
 type DNSRule interface {
 	Rule
+	HasExpectIP() bool
 	DisableCache() bool
 	RewriteTTL() *uint32
 }

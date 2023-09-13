@@ -39,6 +39,10 @@ type DefaultDNSRule struct {
 	rewriteTTL   *uint32
 }
 
+func (d *DefaultDNSRule) HasExpectIP() bool {
+	return d.hasExpectIP
+}
+
 func NewDefaultDNSRule(router adapter.Router, logger log.ContextLogger, options option.DefaultDNSRule) (*DefaultDNSRule, error) {
 	rule := &DefaultDNSRule{
 		abstractDefaultRule: abstractDefaultRule{
@@ -105,6 +109,12 @@ func NewDefaultDNSRule(router adapter.Router, logger log.ContextLogger, options 
 		item := NewGeositeItem(router, logger, options.Geosite)
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
+	}
+	if len(options.ExpectGeoIP) > 0 {
+		item := NewGeoIPItem(router, logger, false, options.ExpectGeoIP)
+		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
+		rule.allItems = append(rule.allItems, item)
+		rule.hasExpectIP = true // will reMatch again
 	}
 	if len(options.SourceGeoIP) > 0 {
 		item := NewGeoIPItem(router, logger, true, options.SourceGeoIP)
@@ -197,6 +207,11 @@ type LogicalDNSRule struct {
 	abstractLogicalRule
 	disableCache bool
 	rewriteTTL   *uint32
+}
+
+// HasExpectIP implements adapter.DNSRule.
+func (*LogicalDNSRule) HasExpectIP() bool {
+	panic("unimplemented")
 }
 
 func NewLogicalDNSRule(router adapter.Router, logger log.ContextLogger, options option.LogicalDNSRule) (*LogicalDNSRule, error) {
