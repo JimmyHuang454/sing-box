@@ -24,8 +24,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: "temurin"
-          java-version: "17"
+          distribution: "oracle"
+          java-version: "20"
 
       - name: Setup Android SDK
         uses: amyu/setup-android@v2
@@ -41,6 +41,12 @@ jobs:
         with:
           install-only: true
       - run: go install -v github.com/tcnksm/ghr@latest
+
+      - run: |
+          cd ./sing-box-for-android
+          echo "VERSION_NAME=null" > local.properties
+          echo "VERSION_CODE=null" >> local.properties
+          sed -i '/signingConfigs\.release/d' app/build.gradle
 
       - run: |
           cd ./sb
