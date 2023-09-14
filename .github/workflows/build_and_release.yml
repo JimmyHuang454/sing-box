@@ -43,9 +43,11 @@ jobs:
       - run: go install -v github.com/tcnksm/ghr@latest
 
       - run: |
-          cd ./sing-box-for-android
-          echo "VERSION_NAME=release" > local.properties
-          echo "VERSION_CODE=1.5.1" >> local.properties
+          cd ./sb
+          version=$(CGO_ENABLED=0 go run ./cmd/internal/read_tag)
+          cd ../sing-box-for-android
+          echo "VERSION_NAME=${version}" > local.properties
+          echo "VERSION_CODE=$(date +%Y%m%d%H)" >> local.properties
           sed -i '/signingConfigs\.release/d' app/build.gradle
 
       - run: |
