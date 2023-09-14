@@ -44,8 +44,8 @@ jobs:
 
       - run: |
           cd ./sing-box-for-android
-          echo "VERSION_NAME=null" > local.properties
-          echo "VERSION_CODE=null" >> local.properties
+          echo "VERSION_NAME=release" > local.properties
+          echo "VERSION_CODE=1.5.1" >> local.properties
           sed -i '/signingConfigs\.release/d' app/build.gradle
 
       - run: |
