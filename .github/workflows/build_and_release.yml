@@ -43,6 +43,7 @@ jobs:
       - run: go install -v github.com/tcnksm/ghr@latest
 
       - run: |
+          cd ./sb
           make lib_install
           make release_android
           make release
