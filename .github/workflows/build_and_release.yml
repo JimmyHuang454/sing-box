@@ -11,9 +11,17 @@ jobs:
     permissions: write-all
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          repository: "SagerNet/sing-box-for-android"
+          path: "sing-box-for-android"
+          fetch-depth: "0"
 
-      - name: Set up JDK 1.8
+      - uses: actions/checkout@v4
+        with:
+          path: "sb"
+
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: "temurin"
@@ -34,7 +42,9 @@ jobs:
           install-only: true
       - run: go install -v github.com/tcnksm/ghr@latest
 
-      - run: make release
+      - run: |
+          make lib_install
+          make release_android
+          make release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: ls

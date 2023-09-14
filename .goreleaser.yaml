@@ -37,58 +37,58 @@ builds:
       - darwin_amd64_v1
       # - darwin_amd64_v3
       # - darwin_arm64
-    mod_timestamp: '{{ .CommitTimestamp }}'
-  - id: android
-    main: ./cmd/sing-box
-    flags:
-      - -v
-      - -trimpath
-    asmflags:
-      - all=-trimpath={{.Env.GOPATH}}
-    gcflags:
-      - all=-trimpath={{.Env.GOPATH}}
-    ldflags:
-      - -X github.com/sagernet/sing-box/constant.Version={{ .Version }} -s -w -buildid=
-    tags:
-      - with_gvisor
-      - with_quic
-      - with_dhcp
-      - with_wireguard
-      - with_ech
-      - with_utls
-      - with_grpc
-      - with_clash_api
-    env:
-      - CGO_ENABLED=1
-    overrides:
-      - goos: android
-        goarch: arm
-        goarm: 7
-        env:
-          - CC=armv7a-linux-androideabi19-clang
-          - CXX=armv7a-linux-androideabi19-clang++
-      - goos: android
-        goarch: arm64
-        env:
-          - CC=aarch64-linux-android21-clang
-          - CXX=aarch64-linux-android21-clang++
-      - goos: android
-        goarch: 386
-        env:
-          - CC=i686-linux-android19-clang
-          - CXX=i686-linux-android19-clang++
-      - goos: android
-        goarch: amd64
-        goamd64: v1
-        env:
-          - CC=x86_64-linux-android21-clang
-          - CXX=x86_64-linux-android21-clang++
-    targets:
-      - android_arm_7
-      - android_arm64
-      - android_386
-      - android_amd64
-    mod_timestamp: '{{ .CommitTimestamp }}'
+    mod_timestamp: "{{ .CommitTimestamp }}"
+  # - id: android
+  #   main: ./cmd/sing-box
+  #   flags:
+  #     - -v
+  #     - -trimpath
+  #   asmflags:
+  #     - all=-trimpath={{.Env.GOPATH}}
+  #   gcflags:
+  #     - all=-trimpath={{.Env.GOPATH}}
+  #   ldflags:
+  #     - -X github.com/sagernet/sing-box/constant.Version={{ .Version }} -s -w -buildid=
+  #   tags:
+  #     - with_gvisor
+  #     - with_quic
+  #     - with_dhcp
+  #     - with_wireguard
+  #     - with_ech
+  #     - with_utls
+  #     - with_grpc
+  #     - with_clash_api
+  #   env:
+  #     - CGO_ENABLED=1
+  #   overrides:
+  #     - goos: android
+  #       goarch: arm
+  #       goarm: 7
+  #       env:
+  #         - CC=armv7a-linux-androideabi19-clang
+  #         - CXX=armv7a-linux-androideabi19-clang++
+  #     - goos: android
+  #       goarch: arm64
+  #       env:
+  #         - CC=aarch64-linux-android21-clang
+  #         - CXX=aarch64-linux-android21-clang++
+  #     - goos: android
+  #       goarch: 386
+  #       env:
+  #         - CC=i686-linux-android19-clang
+  #         - CXX=i686-linux-android19-clang++
+  #     - goos: android
+  #       goarch: amd64
+  #       goamd64: v1
+  #       env:
+  #         - CC=x86_64-linux-android21-clang
+  #         - CXX=x86_64-linux-android21-clang++
+  #   targets:
+  #     - android_arm_7
+  #     - android_arm64
+  #     - android_386
+  #     - android_amd64
+  #   mod_timestamp: '{{ .CommitTimestamp }}'
 snapshot:
   name_template: "{{ .Version }}.{{ .ShortCommit }}"
 archives:
@@ -129,17 +129,17 @@ nfpms:
         dst: /usr/share/licenses/sing-box/LICENSE
 source:
   enabled: false
-  name_template: '{{ .ProjectName }}-{{ .Version }}.source'
-  prefix_template: '{{ .ProjectName }}-{{ .Version }}/'
+  name_template: "{{ .ProjectName }}-{{ .Version }}.source"
+  prefix_template: "{{ .ProjectName }}-{{ .Version }}/"
 checksum:
   disable: true
-  name_template: '{{ .ProjectName }}-{{ .Version }}.checksum'
+  name_template: "{{ .ProjectName }}-{{ .Version }}.checksum"
 signs:
   - artifacts: checksum
 release:
   github:
     owner: JimmyHuang454
     name: sing-box
-  name_template: '{{ if .IsSnapshot }}{{ nightly }}{{ else }}{{ .Version }}{{ end }}'
+  name_template: "{{ if .IsSnapshot }}{{ nightly }}{{ else }}{{ .Version }}{{ end }}"
   draft: true
   mode: replace

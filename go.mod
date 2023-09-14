@@ -5,6 +5,7 @@ go 1.20
 replace github.com/sagernet/quic-go v0.0.0-20230911082307-390b7c274032 => github.com/JimmyHuang454/quic-go v0.0.0-20230911111950-cfa4b79686d0
 
 replace github.com/sagernet/sing-quic v0.0.0-20230912130846-98205e7e798c => github.com/JimmyHuang454/sing-quic v0.0.0-20230913083640-56fc751d309c
+
 //replace github.com/sagernet/quic-go => ../quic-go
 //replace github.com/sagernet/sing-quic => ../sing-quic
 //replace github.com/JimmyHuang454/qtls-go1-20-JLS => ../qtls-go1-20-JLS
@@ -95,7 +96,9 @@ require (
 	github.com/vishvananda/netns v0.0.0-20211101163701-50045581ed74 // indirect
 	github.com/zeebo/blake3 v0.2.3 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
+	golang.org/x/mobile v0.0.0-20230906132913-2077a3224571 // indirect
 	golang.org/x/mod v0.12.0 // indirect
+	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.13.0 // indirect
