@@ -54,7 +54,7 @@ func init() {
 	sharedFlags = append(sharedFlags, "-X github.com/sagernet/sing-box/constant.Version="+currentTag+" -s -w -buildid=")
 	debugFlags = append(debugFlags, "-X github.com/sagernet/sing-box/constant.Version="+currentTag)
 
-	sharedTags = append(sharedTags, "with_gvisor", "with_quic", "with_wireguard", "with_ech", "with_utls", "with_clash_api")
+	sharedTags = append(sharedTags, "with_gvisor", "with_quic", "with_wireguard", "with_ech", "with_utls", "with_clash_api", "with_grpc")
 	iosTags = append(iosTags, "with_dhcp", "with_low_memory", "with_conntrack")
 	debugTags = append(debugTags, "debug")
 }
@@ -93,14 +93,15 @@ func buildAndroid() {
 
 	const name = "libbox.aar"
 	copyPath := filepath.Join("..", "sing-box-for-android", "app", "libs")
-	if rw.FileExists(copyPath) {
-		copyPath, _ = filepath.Abs(copyPath)
-		err = rw.CopyFile(name, filepath.Join(copyPath, name))
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Info("copied to ", copyPath)
+	if !rw.FileExists(copyPath) {
+		panic("missing " + copyPath)
 	}
+	copyPath, _ = filepath.Abs(copyPath)
+	err = rw.CopyFile(name, filepath.Join(copyPath, name))
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info("copied to ", copyPath)
 }
 
 func buildiOS() {
