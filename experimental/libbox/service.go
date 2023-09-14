@@ -130,10 +130,6 @@ func (w *platformInterfaceWrapper) OpenTun(options *tun.Options, platformOptions
 	return tun.New(*options)
 }
 
-func (w *platformInterfaceWrapper) CloseTun() error {
-	return w.iif.CloseTun()
-}
-
 func (w *platformInterfaceWrapper) Write(p []byte) (n int, err error) {
 	w.iif.WriteLog(string(p))
 	return len(p), nil
