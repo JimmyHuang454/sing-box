@@ -207,11 +207,12 @@ type LogicalDNSRule struct {
 	abstractLogicalRule
 	disableCache bool
 	rewriteTTL   *uint32
+	hasExpectIP  bool
 }
 
 // HasExpectIP implements adapter.DNSRule.
-func (*LogicalDNSRule) HasExpectIP() bool {
-	panic("unimplemented")
+func (l *LogicalDNSRule) HasExpectIP() bool {
+	return l.hasExpectIP
 }
 
 func NewLogicalDNSRule(router adapter.Router, logger log.ContextLogger, options option.LogicalDNSRule) (*LogicalDNSRule, error) {
@@ -238,6 +239,9 @@ func NewLogicalDNSRule(router adapter.Router, logger log.ContextLogger, options 
 			return nil, E.Cause(err, "sub rule[", i, "]")
 		}
 		r.rules[i] = rule
+		if rule.HasExpectIP() {
+			r.hasExpectIP = true
+		}
 	}
 	return r, nil
 }
