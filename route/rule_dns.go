@@ -5,6 +5,7 @@ import (
 	C "github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/log"
 	"github.com/sagernet/sing-box/option"
+	"github.com/sagernet/sing/common"
 	E "github.com/sagernet/sing/common/exceptions"
 )
 
@@ -37,10 +38,24 @@ type DefaultDNSRule struct {
 	abstractDefaultRule
 	disableCache bool
 	rewriteTTL   *uint32
+
+	expectedGeoIP []RuleItem
+}
+
+func (d *DefaultDNSRule) MatchExpectedIP(metadata *adapter.InboundContext) bool {
+	if !d.HasExpectIP() {
+		return !d.invert
+	}
+	for _, item := range d.expectedGeoIP {
+		if item.Match(metadata) {
+			return !d.invert
+		}
+	}
+	return d.invert
 }
 
 func (d *DefaultDNSRule) HasExpectIP() bool {
-	return d.hasExpectIP
+	return len(d.expectedGeoIP) != 0
 }
 
 func NewDefaultDNSRule(router adapter.Router, logger log.ContextLogger, options option.DefaultDNSRule) (*DefaultDNSRule, error) {
@@ -112,9 +127,7 @@ func NewDefaultDNSRule(router adapter.Router, logger log.ContextLogger, options 
 	}
 	if len(options.ExpectGeoIP) > 0 {
 		item := NewGeoIPItem(router, logger, false, options.ExpectGeoIP)
-		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
-		rule.allItems = append(rule.allItems, item)
-		rule.hasExpectIP = true // will reMatch again
+		rule.expectedGeoIP = append(rule.expectedGeoIP, item)
 	}
 	if len(options.SourceGeoIP) > 0 {
 		item := NewGeoIPItem(router, logger, true, options.SourceGeoIP)
@@ -207,12 +220,27 @@ type LogicalDNSRule struct {
 	abstractLogicalRule
 	disableCache bool
 	rewriteTTL   *uint32
-	hasExpectIP  bool
+
+	expectedGeoIP []*DefaultDNSRule
 }
 
-// HasExpectIP implements adapter.DNSRule.
+func (l *LogicalDNSRule) MatchExpectedIP(metadata *adapter.InboundContext) bool {
+	if !l.HasExpectIP() {
+		return !l.invert
+	}
+	if l.mode == C.LogicalTypeAnd {
+		return common.All(l.expectedGeoIP, func(it *DefaultDNSRule) bool {
+			return it.MatchExpectedIP(metadata)
+		}) != l.invert
+	} else {
+		return common.Any(l.expectedGeoIP, func(it *DefaultDNSRule) bool {
+			return it.MatchExpectedIP(metadata)
+		}) != l.invert
+	}
+}
+
 func (l *LogicalDNSRule) HasExpectIP() bool {
-	return l.hasExpectIP
+	return len(l.expectedGeoIP) != 0
 }
 
 func NewLogicalDNSRule(router adapter.Router, logger log.ContextLogger, options option.LogicalDNSRule) (*LogicalDNSRule, error) {
@@ -240,7 +268,7 @@ func NewLogicalDNSRule(router adapter.Router, logger log.ContextLogger, options 
 		}
 		r.rules[i] = rule
 		if rule.HasExpectIP() {
-			r.hasExpectIP = true
+			r.expectedGeoIP = append(r.expectedGeoIP, rule)
 		}
 	}
 	return r, nil
