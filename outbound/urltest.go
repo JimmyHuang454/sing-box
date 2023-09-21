@@ -218,6 +218,9 @@ func (g *URLTestGroup) Select(network string) adapter.Outbound {
 		if !common.Contains(detour.Network(), network) {
 			continue
 		}
+		if minOutbound == nil {
+			minOutbound = detour
+		}
 		history := g.history.LoadURLTestHistory(RealTag(detour))
 		if history == nil {
 			continue
@@ -226,15 +229,6 @@ func (g *URLTestGroup) Select(network string) adapter.Outbound {
 			minDelay = history.Delay
 			minTime = history.Time
 			minOutbound = detour
-		}
-	}
-	if minOutbound == nil {
-		for _, detour := range g.outbounds {
-			if !common.Contains(detour.Network(), network) {
-				continue
-			}
-			minOutbound = detour
-			break
 		}
 	}
 	return minOutbound
