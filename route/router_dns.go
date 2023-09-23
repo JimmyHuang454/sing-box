@@ -42,12 +42,6 @@ func (r *Router) matchDNS(ctx context.Context, message *mDNS.Msg) (context.Conte
 	if metadata == nil {
 		panic("no context")
 	}
-	resTransport := r.defaultTransport
-	resDomainStrategy := r.defaultDomainStrategy
-	if domainStrategy, dsLoaded := r.transportDomainStrategy[resTransport]; dsLoaded {
-		resDomainStrategy = domainStrategy
-	}
-
 	for i, rule := range r.dnsRules {
 		if !rule.Match(metadata) {
 			continue
@@ -68,21 +62,24 @@ func (r *Router) matchDNS(ctx context.Context, message *mDNS.Msg) (context.Conte
 		if rewriteTTL := rule.RewriteTTL(); rewriteTTL != nil {
 			ctx = dns.ContextWithRewriteTTL(ctx, *rewriteTTL)
 		}
-		resTransport = transport
-		resDomainStrategy = r.defaultDomainStrategy
-		if domainStrategy, dsLoaded := r.transportDomainStrategy[resTransport]; dsLoaded {
-			resDomainStrategy = domainStrategy
+		domainStrategy := r.defaultDomainStrategy
+		if ds, dsLoaded := r.transportDomainStrategy[transport]; dsLoaded {
+			domainStrategy = ds
 		}
 		if message == nil {
-			break
+			return ctx, transport, domainStrategy, nil, nil
 		}
-		response, err := r.doExcange(ctx, message, resTransport, resDomainStrategy)
+		response, err := r.doExcange(ctx, message, transport, domainStrategy)
 		if err == nil && !r.matchExpectedIP(response) {
 			continue
 		}
-		return ctx, resTransport, resDomainStrategy, response, err
+		return ctx, transport, domainStrategy, response, err
 	}
-	return ctx, resTransport, resDomainStrategy, nil, nil
+	domainStrategy := r.defaultDomainStrategy
+	if ds, dsLoaded := r.transportDomainStrategy[r.defaultTransport]; dsLoaded {
+		domainStrategy = ds
+	}
+	return ctx, r.defaultTransport, domainStrategy, nil, nil
 }
 
 func (r *Router) doExcange(ctx context.Context, message *mDNS.Msg, transport dns.Transport, strategy dns.DomainStrategy) (*mDNS.Msg, error) {
