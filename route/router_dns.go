@@ -74,12 +74,7 @@ func (r *Router) matchDNS(ctx context.Context) (context.Context, dns.Transport, 
 	return ctx, resTransport, resDomainStrategy
 }
 
-func (r *Router) ExpectIP() bool {
-	return true
-}
-
-func (r *Router) ExchangeWithoutCache(ctx context.Context, message *mDNS.Msg) (*mDNS.Msg, error) {
-	ctx, transport, strategy := r.matchDNS(ctx)
+func (r *Router) doExcange(ctx context.Context, message *mDNS.Msg, transport dns.Transport, strategy dns.DomainStrategy) (*mDNS.Msg, error) {
 	ctx, cancel := context.WithTimeout(ctx, C.DNSTimeout)
 	defer cancel()
 	response, err := r.dnsClient.Exchange(ctx, transport, message, strategy)
@@ -108,7 +103,8 @@ func (r *Router) Exchange(ctx context.Context, message *mDNS.Msg) (*mDNS.Msg, er
 			}
 			metadata.Domain = fqdnToDomain(message.Question[0].Name)
 		}
-		response, err = r.ExchangeWithoutCache(ctx, message)
+		ctx, transport, strategy := r.matchDNS(ctx)
+		response, err = r.doExcange(ctx, message, transport, strategy)
 		if err != nil && len(message.Question) > 0 {
 			r.dnsLogger.ErrorContext(ctx, E.Cause(err, "exchange failed for ", formatQuestion(message.Question[0].String())))
 		}
