@@ -47,8 +47,6 @@ type InboundContext struct {
 	ProcessInfo          *process.Info
 	FakeIP               bool
 
-	// dns cache
-	MatchedDNSRule *DNSRule
 	QueryType      uint16
 }
 

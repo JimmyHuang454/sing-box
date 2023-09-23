@@ -37,13 +37,17 @@ func (m *DNSReverseMapping) Query(address netip.Addr) (string, bool) {
 	return domain, loaded
 }
 
-func (r *Router) matchDNS(ctx context.Context) (context.Context, dns.Transport, dns.DomainStrategy) {
+func (r *Router) matchDNS(ctx context.Context, message *mDNS.Msg) (context.Context, dns.Transport, dns.DomainStrategy, *mDNS.Msg, error) {
 	metadata := adapter.ContextFrom(ctx)
 	if metadata == nil {
 		panic("no context")
 	}
 	resTransport := r.defaultTransport
-	resDomainStrategy := dns.DomainStrategyAsIS
+	resDomainStrategy := r.defaultDomainStrategy
+	if domainStrategy, dsLoaded := r.transportDomainStrategy[resTransport]; dsLoaded {
+		resDomainStrategy = domainStrategy
+	}
+
 	for i, rule := range r.dnsRules {
 		if !rule.Match(metadata) {
 			continue
@@ -65,13 +69,20 @@ func (r *Router) matchDNS(ctx context.Context) (context.Context, dns.Transport, 
 			ctx = dns.ContextWithRewriteTTL(ctx, *rewriteTTL)
 		}
 		resTransport = transport
-		metadata.MatchedDNSRule = &rule
-		break
+		resDomainStrategy = r.defaultDomainStrategy
+		if domainStrategy, dsLoaded := r.transportDomainStrategy[resTransport]; dsLoaded {
+			resDomainStrategy = domainStrategy
+		}
+		if message == nil {
+			break
+		}
+		response, err := r.doExcange(ctx, message, resTransport, resDomainStrategy)
+		if err == nil && !r.matchExpectedIP(response) {
+			continue
+		}
+		return ctx, resTransport, resDomainStrategy, response, err
 	}
-	if domainStrategy, dsLoaded := r.transportDomainStrategy[r.defaultTransport]; dsLoaded {
-		resDomainStrategy = domainStrategy
-	}
-	return ctx, resTransport, resDomainStrategy
+	return ctx, resTransport, resDomainStrategy, nil, nil
 }
 
 func (r *Router) doExcange(ctx context.Context, message *mDNS.Msg, transport dns.Transport, strategy dns.DomainStrategy) (*mDNS.Msg, error) {
@@ -79,6 +90,10 @@ func (r *Router) doExcange(ctx context.Context, message *mDNS.Msg, transport dns
 	defer cancel()
 	response, err := r.dnsClient.Exchange(ctx, transport, message, strategy)
 	return response, err
+}
+
+func (r *Router) matchExpectedIP(response *mDNS.Msg) bool {
+	return true
 }
 
 func (r *Router) Exchange(ctx context.Context, message *mDNS.Msg) (*mDNS.Msg, error) {
@@ -103,8 +118,8 @@ func (r *Router) Exchange(ctx context.Context, message *mDNS.Msg) (*mDNS.Msg, er
 			}
 			metadata.Domain = fqdnToDomain(message.Question[0].Name)
 		}
-		ctx, transport, strategy := r.matchDNS(ctx)
-		response, err = r.doExcange(ctx, message, transport, strategy)
+		ctx, _, _, response, err = r.matchDNS(ctx, message)
+		// response, err = r.doExcange(ctx, message, transport, strategy)
 		if err != nil && len(message.Question) > 0 {
 			r.dnsLogger.ErrorContext(ctx, E.Cause(err, "exchange failed for ", formatQuestion(message.Question[0].String())))
 		}
@@ -129,7 +144,7 @@ func (r *Router) Lookup(ctx context.Context, domain string, strategy dns.DomainS
 	r.dnsLogger.DebugContext(ctx, "lookup domain ", domain)
 	ctx, metadata := adapter.AppendContext(ctx)
 	metadata.Domain = domain
-	ctx, transport, transportStrategy := r.matchDNS(ctx)
+	ctx, transport, transportStrategy, _, _ := r.matchDNS(ctx, nil)
 	if strategy == dns.DomainStrategyAsIS {
 		strategy = transportStrategy
 	}
