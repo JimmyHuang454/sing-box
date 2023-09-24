@@ -2,9 +2,9 @@ module github.com/sagernet/sing-box
 
 go 1.20
 
-replace github.com/sagernet/quic-go v0.0.0-20230911082307-390b7c274032 => github.com/JimmyHuang454/quic-go v0.0.0-20230911111950-cfa4b79686d0
+replace github.com/sagernet/quic-go v0.0.0-20230919101909-0cc6c5dcecee => github.com/JimmyHuang454/quic-go v0.0.0-20230924205745-2cc838e5dd1c
 
-replace github.com/sagernet/sing-quic v0.0.0-20230912130846-98205e7e798c => github.com/JimmyHuang454/sing-quic v0.0.0-20230913083640-56fc751d309c
+replace github.com/sagernet/sing-quic v0.1.1-0.20230922040527-541e66a4a16d => github.com/JimmyHuang454/sing-quic v0.0.0-20230924210113-4336e0b87f1c
 
 //replace github.com/sagernet/quic-go => ../quic-go
 //replace github.com/sagernet/sing-quic => ../sing-quic
@@ -85,7 +85,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/libdns/libdns v0.2.1 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
-	github.com/onsi/ginkgo/v2 v2.12.0 // indirect
+	github.com/onsi/ginkgo/v2 v2.12.1 // indirect
 	github.com/pierrec/lz4/v4 v4.1.14 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect

@@ -10,10 +10,14 @@ github.com/JimmyHuang454/qtls-go1-20-JLS v0.0.0-20230909050831-219b978e3919 h1:v
 github.com/JimmyHuang454/qtls-go1-20-JLS v0.0.0-20230909050831-219b978e3919/go.mod h1:OFRBykuJ6qGCLprg7Hgk/JKvf2VPK2mz4LexbsI9eTg=
 github.com/JimmyHuang454/quic-go v0.0.0-20230911111950-cfa4b79686d0 h1:oJG1cwDEkMgp4eo3wOe5mXxlXCIYYUtwUc+eaDZWOS0=
 github.com/JimmyHuang454/quic-go v0.0.0-20230911111950-cfa4b79686d0/go.mod h1:CZXWjaaLnag9hLecR2ex39R6jf/I5lCgfcNs+CQnoE0=
+github.com/JimmyHuang454/quic-go v0.0.0-20230924205745-2cc838e5dd1c h1:OKQALXP/zQdmGgmd3SAKPLBsS3itKj8u69gFGAxHZbM=
+github.com/JimmyHuang454/quic-go v0.0.0-20230924205745-2cc838e5dd1c/go.mod h1:h+mXbCkqaihahJpZy7nSs77oejAysQHRpXkkReAi92k=
 github.com/JimmyHuang454/sing-quic v0.0.0-20230913053520-26ef2f81520e h1:JggX3cyiVSkf85yQQPBq0q8NRLs3v/Q3Qc5wRIyVj20=
 github.com/JimmyHuang454/sing-quic v0.0.0-20230913053520-26ef2f81520e/go.mod h1:7GQQeST77nz+H4zVJknlgTVI3iue3e8e7OcCHELGQhw=
 github.com/JimmyHuang454/sing-quic v0.0.0-20230913083640-56fc751d309c h1:hoNFI3bdXuYKh9s7mG5mO/4W8p/zY4b0D5I8QMbagas=
 github.com/JimmyHuang454/sing-quic v0.0.0-20230913083640-56fc751d309c/go.mod h1:BZUKRIwWwCvt8tMVU382DpLXwGiDvLSD4n/45tmPzRU=
+github.com/JimmyHuang454/sing-quic v0.0.0-20230924210113-4336e0b87f1c h1:aQVOJS8fDRWVG4JDvZcclGdWHYRQLFu1ghf01oFyZko=
+github.com/JimmyHuang454/sing-quic v0.0.0-20230924210113-4336e0b87f1c/go.mod h1:SWJ6WtuHqCn818vLJbc26N1mq/5hhoR4oGA+zBviweU=
 github.com/ajg/form v1.5.1 h1:t9c7v8JUKu/XxOGBU0yjNpaMloxGEJhUkqFRq0ibGeU=
 github.com/ajg/form v1.5.1/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
 github.com/andybalholm/brotli v1.0.5 h1:8uQZIdzKmjc/iuPu7O2ioW48L81FgatrcpfFmiq/cCs=
@@ -92,6 +96,8 @@ github.com/miekg/dns v1.1.56/go.mod h1:cRm6Oo2C8TY9ZS/TqsSrseAcncm74lfK5G+ikN2SW
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/onsi/ginkgo/v2 v2.12.0 h1:UIVDowFPwpg6yMUpPjGkYvf06K3RAiJXUhCxEwQVHRI=
 github.com/onsi/ginkgo/v2 v2.12.0/go.mod h1:ZNEzXISYlqpb8S36iN71ifqLi3vVD1rVJGvWRCJOUpQ=
+github.com/onsi/ginkgo/v2 v2.12.1 h1:uHNEO1RP2SpuZApSkel9nEh1/Mu+hmQe7Q+Pepg5OYA=
+github.com/onsi/ginkgo/v2 v2.12.1/go.mod h1:TE309ZR8s5FsKKpuB1YAQYBzCaAfUgatB/xlT/ETL/o=
 github.com/ooni/go-libtor v1.1.8 h1:Wo3V3DVTxl5vZdxtQakqYP+DAHx7pPtAFSl1bnAa08w=
 github.com/ooni/go-libtor v1.1.8/go.mod h1:q1YyLwRD9GeMyeerVvwc0vJ2YgwDLTp2bdVcrh/JXyI=
 github.com/oschwald/maxminddb-golang v1.12.0 h1:9FnTOD0YOhP7DGxGsq4glzpGy5+w7pq50AS6wALUMYs=

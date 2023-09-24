@@ -15,6 +15,7 @@ import (
 	"github.com/sagernet/sing-box/log"
 	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing-quic/tuic"
+	"github.com/sagernet/sing-quic"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/bufio"
 	E "github.com/sagernet/sing/common/exceptions"
@@ -42,7 +43,7 @@ func NewTUIC(ctx context.Context, router adapter.Router, logger log.ContextLogge
 		return nil, C.ErrTLSRequired
 	}
 
-	jls := &O.JLSOptions{Enabled: false}
+	jls := &qtls.JLSOptions{Enabled: false}
 	if options.TLS.JLS != nil && options.TLS.JLS.Enabled {
 		options.TLS.JLS.UseQuic = true
 		jls.Enabled = true

@@ -3,10 +3,12 @@ module test
 go 1.20
 
 require github.com/sagernet/sing-box v0.0.0
+
 replace github.com/sagernet/sing-box => ../
+
 replace github.com/sagernet/sing-quic => ../../sing-quic
 
-replace github.com/sagernet/quic-go v0.0.0-20230911082307-390b7c274032 => github.com/JimmyHuang454/quic-go v0.0.0-20230911111950-cfa4b79686d0
+replace github.com/sagernet/quic-go => ../../quic-go
 
 require (
 	github.com/docker/docker v24.0.6+incompatible
@@ -46,7 +48,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/btree v1.1.2 // indirect
-	github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38 // indirect
+	github.com/google/pprof v0.0.0-20230912144702-c363fe2c2ed8 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/insomniacslk/dhcp v0.0.0-20230908212754-65c27093e38a // indirect
 	github.com/josharian/native v1.1.0 // indirect
@@ -60,7 +62,7 @@ require (
 	github.com/miekg/dns v1.1.56 // indirect
 	github.com/moby/term v0.0.0-20221205130635-1aeaba878587 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
-	github.com/onsi/ginkgo/v2 v2.12.0 // indirect
+	github.com/onsi/ginkgo/v2 v2.12.1 // indirect
 	github.com/ooni/go-libtor v1.1.8 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.2 // indirect
@@ -70,7 +72,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect
-	github.com/quic-go/qtls-go1-20 v0.3.4 // indirect
 	github.com/sagernet/cloudflare-tls v0.0.0-20230829051644-4a68352d0c4a // indirect
 	github.com/sagernet/go-tun2socks v1.16.12-0.20220818015926-16cb67876a61 // indirect
 	github.com/sagernet/gvisor v0.0.0-20230627031050-1ab0276e0dd2 // indirect
