@@ -9,7 +9,6 @@ replace github.com/sagernet/sing-quic v0.0.0-20230912130846-98205e7e798c => gith
 //replace github.com/sagernet/quic-go => ../quic-go
 //replace github.com/sagernet/sing-quic => ../sing-quic
 //replace github.com/JimmyHuang454/qtls-go1-20-JLS => ../qtls-go1-20-JLS
-
 //replace github.com/sagernet/sing => ../sing
 
 require (

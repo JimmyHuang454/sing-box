@@ -3,7 +3,6 @@ module test
 go 1.20
 
 require github.com/sagernet/sing-box v0.0.0
-
 replace github.com/sagernet/sing-box => ../
 
 replace github.com/sagernet/quic-go v0.0.0-20230911082307-390b7c274032 => github.com/JimmyHuang454/quic-go v0.0.0-20230911111950-cfa4b79686d0
