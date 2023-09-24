@@ -14,7 +14,6 @@ import (
 	C "github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/log"
 	"github.com/sagernet/sing-box/option"
-	O "github.com/sagernet/sing-quic"
 	"github.com/sagernet/sing-quic/tuic"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/bufio"

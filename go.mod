@@ -18,33 +18,34 @@ require (
 	github.com/caddyserver/certmagic v0.19.2
 	github.com/cloudflare/circl v1.3.3
 	github.com/cretz/bine v0.2.0
-	github.com/dustin/go-humanize v1.0.1
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/go-chi/chi/v5 v5.0.10
 	github.com/go-chi/cors v1.2.1
 	github.com/go-chi/render v1.0.3
 	github.com/gofrs/uuid/v5 v5.0.0
-	github.com/insomniacslk/dhcp v0.0.0-20230906122924-c71a6be05968
+	github.com/insomniacslk/dhcp v0.0.0-20230908212754-65c27093e38a
+	github.com/libdns/alidns v1.0.3
+	github.com/libdns/cloudflare v0.1.0
 	github.com/logrusorgru/aurora v2.0.3+incompatible
 	github.com/mholt/acmez v1.2.0
-	github.com/miekg/dns v1.1.55
+	github.com/miekg/dns v1.1.56
 	github.com/ooni/go-libtor v1.1.8
 	github.com/oschwald/maxminddb-golang v1.12.0
 	github.com/pires/go-proxyproto v0.7.0
 	github.com/sagernet/cloudflare-tls v0.0.0-20230829051644-4a68352d0c4a
-	github.com/sagernet/gomobile v0.0.0-20230728014906-3de089147f59
+	github.com/sagernet/gomobile v0.0.0-20230915142329-c6740b6d2950
 	github.com/sagernet/gvisor v0.0.0-20230627031050-1ab0276e0dd2
-	github.com/sagernet/quic-go v0.0.0-20230911082307-390b7c274032
+	github.com/sagernet/quic-go v0.0.0-20230919101909-0cc6c5dcecee
 	github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691
-	github.com/sagernet/sing v0.2.10-0.20230912050851-1453c7c8c20d
-	github.com/sagernet/sing-dns v0.1.9-0.20230911082806-425022bdc92b
-	github.com/sagernet/sing-mux v0.1.3-0.20230908032617-759a1886a400
-	github.com/sagernet/sing-quic v0.0.0-20230912130846-98205e7e798c
-	github.com/sagernet/sing-shadowsocks v0.2.5-0.20230907005610-126234728ca0
-	github.com/sagernet/sing-shadowsocks2 v0.1.4-0.20230907005906-5d2917b29248
+	github.com/sagernet/sing v0.2.12-0.20230921162020-494f88c9b8bf
+	github.com/sagernet/sing-dns v0.1.10-0.20230921024525-fc3e4c051ccd
+	github.com/sagernet/sing-mux v0.1.3
+	github.com/sagernet/sing-quic v0.1.1-0.20230922040527-541e66a4a16d
+	github.com/sagernet/sing-shadowsocks v0.2.5
+	github.com/sagernet/sing-shadowsocks2 v0.1.4
 	github.com/sagernet/sing-shadowtls v0.1.4
-	github.com/sagernet/sing-tun v0.1.12-0.20230821065522-7545dc2d5641
-	github.com/sagernet/sing-vmess v0.1.8-0.20230907010359-161fb0ac716b
+	github.com/sagernet/sing-tun v0.1.13-0.20230922035004-b6d323004edd
+	github.com/sagernet/sing-vmess v0.1.8
 	github.com/sagernet/smux v0.0.0-20230312102458-337ec2a5af37
 	github.com/sagernet/tfo-go v0.0.0-20230816093905-5a5c285d44a6
 	github.com/sagernet/utls v0.0.0-20230309024959-6732c2ab36f2
@@ -53,18 +54,19 @@ require (
 	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.4
 	go.etcd.io/bbolt v1.3.7
-	go.uber.org/zap v1.25.0
+	go.uber.org/zap v1.26.0
 	go4.org/netipx v0.0.0-20230824141953-6213f710f925
 	golang.org/x/crypto v0.13.0
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 	golang.org/x/net v0.15.0
 	golang.org/x/sys v0.12.0
 	golang.zx2c4.com/wireguard/wgctrl v0.0.0-20230429144221-925a1e7659e6
-	google.golang.org/grpc v1.58.0
+	google.golang.org/grpc v1.58.1
 	google.golang.org/protobuf v1.31.0
 	howett.net/plist v1.0.0
 )
 
+//replace github.com/sagernet/sing => ../sing
 require (
 	github.com/Dreamacro/protobytes v0.0.0-20230617041236-6500a9f4f158 // indirect
 	github.com/JimmyHuang454/qtls-go1-20-JLS v0.0.0-20230909050831-219b978e3919 // indirect
@@ -87,6 +89,7 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.14 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect
+	github.com/quic-go/qtls-go1-20 v0.3.4 // indirect
 	github.com/sagernet/go-tun2socks v1.16.12-0.20220818015926-16cb67876a61 // indirect
 	github.com/sagernet/netlink v0.0.0-20220905062125-8043b4a9aa97 // indirect
 	github.com/scjalliance/comshim v0.0.0-20230315213746-5e51f40bd3b9 // indirect
@@ -97,7 +100,6 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/mobile v0.0.0-20230906132913-2077a3224571 // indirect
 	golang.org/x/mod v0.12.0 // indirect
-	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.13.0 // indirect

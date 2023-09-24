@@ -1,3 +1,59 @@
+#### 1.5.0-rc.3
+
+* Fixes and improvements
+
+#### 1.5.0-beta.12
+
+* Add `merge` command **1**
+* Fixes and improvements
+
+**1**:
+
+This command also parses path resources that appear in the configuration file and replaces them with embedded
+configuration, such as TLS certificates or SSH private keys.
+
+```
+Merge configurations
+
+Usage:
+  sing-box merge [output] [flags]
+
+Flags:
+  -h, --help   help for merge
+
+Global Flags:
+  -c, --config stringArray             set configuration file path
+  -C, --config-directory stringArray   set configuration directory path
+  -D, --directory string               set working directory
+      --disable-color                  disable color output
+```
+
+#### 1.5.0-beta.11
+
+* Add DNS01 challenge support for ACME TLS certificate issuer **1**
+* Fixes and improvements
+
+**1**:
+
+Only `Alibaba Cloud DNS` and `Cloudflare` are supported,
+see [ACME Fields](/configuration/shared/tls#acme-fields)
+and [DNS01 Challenge Fields](/configuration/shared/dns01_challenge).
+
+#### 1.5.0-beta.10
+
+* Add `interrupt_exist_connections` option for `Selector` and `URLTest` outbounds **1**
+* Fixes and improvements
+
+**1**:
+
+Interrupt existing connections when the selected outbound has changed.
+
+Only inbound connections are affected by this setting, internal connections will always be interrupted.
+
+#### 1.4.3
+
+* Fixes and improvements
+
 #### 1.5.0-beta.8
 
 * Fixes and improvements
