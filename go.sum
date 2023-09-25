@@ -18,6 +18,8 @@ github.com/JimmyHuang454/sing-quic v0.0.0-20230913083640-56fc751d309c h1:hoNFI3b
 github.com/JimmyHuang454/sing-quic v0.0.0-20230913083640-56fc751d309c/go.mod h1:BZUKRIwWwCvt8tMVU382DpLXwGiDvLSD4n/45tmPzRU=
 github.com/JimmyHuang454/sing-quic v0.0.0-20230924210113-4336e0b87f1c h1:aQVOJS8fDRWVG4JDvZcclGdWHYRQLFu1ghf01oFyZko=
 github.com/JimmyHuang454/sing-quic v0.0.0-20230924210113-4336e0b87f1c/go.mod h1:SWJ6WtuHqCn818vLJbc26N1mq/5hhoR4oGA+zBviweU=
+github.com/JimmyHuang454/sing-quic v0.0.0-20230924220056-639291fee68c h1:dbfC2taoTJxM9KtC5wiYjH2EWPah7h42hUsj5tzzIe8=
+github.com/JimmyHuang454/sing-quic v0.0.0-20230924220056-639291fee68c/go.mod h1:Bo7cRBDmDukpYlG6DFCiKohcuFUBUEZl1N9e4D5WjqM=
 github.com/ajg/form v1.5.1 h1:t9c7v8JUKu/XxOGBU0yjNpaMloxGEJhUkqFRq0ibGeU=
 github.com/ajg/form v1.5.1/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
 github.com/andybalholm/brotli v1.0.5 h1:8uQZIdzKmjc/iuPu7O2ioW48L81FgatrcpfFmiq/cCs=

@@ -4,7 +4,7 @@ go 1.20
 
 replace github.com/sagernet/quic-go v0.0.0-20230919101909-0cc6c5dcecee => github.com/JimmyHuang454/quic-go v0.0.0-20230924205745-2cc838e5dd1c
 
-replace github.com/sagernet/sing-quic v0.1.1-0.20230922040527-541e66a4a16d => github.com/JimmyHuang454/sing-quic v0.0.0-20230924210113-4336e0b87f1c
+replace github.com/sagernet/sing-quic v0.1.1-0.20230922040527-541e66a4a16d => github.com/JimmyHuang454/sing-quic v0.0.0-20230924220056-639291fee68c
 
 //replace github.com/sagernet/quic-go => ../quic-go
 //replace github.com/sagernet/sing-quic => ../sing-quic
