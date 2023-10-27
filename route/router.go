@@ -254,10 +254,10 @@ func NewRouter(
 		var inet4Range netip.Prefix
 		var inet6Range netip.Prefix
 		if fakeIPOptions.Inet4Range != nil {
-			inet4Range = fakeIPOptions.Inet4Range.Build()
+			inet4Range = *fakeIPOptions.Inet4Range
 		}
 		if fakeIPOptions.Inet6Range != nil {
-			inet6Range = fakeIPOptions.Inet6Range.Build()
+			inet6Range = *fakeIPOptions.Inet6Range
 		}
 		router.fakeIPStore = fakeip.NewStore(router, router.logger, inet4Range, inet6Range)
 		router.fakeIPDualStack = inet4Range.IsValid() && inet6Range.IsValid()
@@ -696,6 +696,11 @@ func (r *Router) RouteConnection(ctx context.Context, conn net.Conn, metadata ad
 		metadata.DestinationAddresses = addresses
 		r.dnsLogger.DebugContext(ctx, "resolved [", strings.Join(F.MapToString(metadata.DestinationAddresses), " "), "]")
 	}
+	if metadata.Destination.IsIPv4() {
+		metadata.IPVersion = 4
+	} else if metadata.Destination.IsIPv6() {
+		metadata.IPVersion = 6
+	}
 	ctx, matchedRule, detour, err := r.match(ctx, &metadata, r.defaultOutboundForConnection)
 	if err != nil {
 		return err
@@ -811,6 +816,11 @@ func (r *Router) RoutePacketConnection(ctx context.Context, conn N.PacketConn, m
 		}
 		metadata.DestinationAddresses = addresses
 		r.dnsLogger.DebugContext(ctx, "resolved [", strings.Join(F.MapToString(metadata.DestinationAddresses), " "), "]")
+	}
+	if metadata.Destination.IsIPv4() {
+		metadata.IPVersion = 4
+	} else if metadata.Destination.IsIPv6() {
+		metadata.IPVersion = 6
 	}
 	ctx, matchedRule, detour, err := r.match(ctx, &metadata, r.defaultOutboundForPacketConnection)
 	if err != nil {
@@ -928,9 +938,8 @@ func (r *Router) AutoDetectInterfaceFunc() control.Func {
 		return control.BindToInterfaceFunc(r.InterfaceFinder(), func(network string, address string) (interfaceName string, interfaceIndex int, err error) {
 			remoteAddr := M.ParseSocksaddr(address).Addr
 			if C.IsLinux {
-				interfaceName = r.InterfaceMonitor().DefaultInterfaceName(remoteAddr)
-				interfaceIndex = -1
-				if interfaceName == "" {
+				interfaceName, interfaceIndex = r.InterfaceMonitor().DefaultInterface(remoteAddr)
+				if interfaceIndex == -1 {
 					err = tun.ErrNoRoute
 				}
 			} else {

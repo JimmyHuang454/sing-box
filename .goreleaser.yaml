@@ -93,6 +93,9 @@ snapshot:
   name_template: "{{ .Version }}.{{ .ShortCommit }}"
 archives:
   - id: archive
+    builds:
+      - main
+      - android
     format: tar.gz
     format_overrides:
       - goos: windows

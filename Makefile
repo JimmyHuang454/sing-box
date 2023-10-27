@@ -64,7 +64,7 @@ release:
 	mkdir dist/release
 	mv dist/*.tar.gz dist/*.zip dist/*.deb dist/*.rpm dist/release
 	ghr --replace --draft --prerelease -p 3 "v${VERSION}" dist/release
-	rm -r dist
+	rm -r dist/release
 
 release_install:
 	go install -v github.com/goreleaser/goreleaser@latest
@@ -94,7 +94,7 @@ build_ios:
 
 upload_ios_app_store:
 	cd ../sing-box-for-apple && \
-	xcodebuild -exportArchive -archivePath build/SFI.xcarchive -exportOptionsPlist SFI/Upload.plist
+	xcodebuild -exportArchive -archivePath build/SFI.xcarchive -exportOptionsPlist SFI/Upload.plist -allowProvisioningUpdates
 
 release_ios: build_ios upload_ios_app_store
 
@@ -105,7 +105,7 @@ build_macos:
 
 upload_macos_app_store:
 	cd ../sing-box-for-apple && \
-	xcodebuild -exportArchive -archivePath build/SFM.xcarchive -exportOptionsPlist SFI/Upload.plist
+	xcodebuild -exportArchive -archivePath build/SFM.xcarchive -exportOptionsPlist SFI/Upload.plist  -allowProvisioningUpdates
 
 release_macos: build_macos upload_macos_app_store
 
@@ -116,7 +116,7 @@ build_macos_independent:
 
 notarize_macos_independent:
 	cd ../sing-box-for-apple && \
-	xcodebuild -exportArchive -archivePath "build/SFM.System.xcarchive" -exportOptionsPlist SFM.System/Upload.plist
+	xcodebuild -exportArchive -archivePath "build/SFM.System.xcarchive" -exportOptionsPlist SFM.System/Upload.plist  -allowProvisioningUpdates
 
 wait_notarize_macos_independent:
 	sleep 60
@@ -142,7 +142,7 @@ build_tvos:
 
 upload_tvos_app_store:
 	cd ../sing-box-for-apple && \
-	xcodebuild -exportArchive -archivePath "build/SFT.xcarchive" -exportOptionsPlist SFI/Upload.plist
+	xcodebuild -exportArchive -archivePath "build/SFT.xcarchive" -exportOptionsPlist SFI/Upload.plist  -allowProvisioningUpdates
 
 release_tvos: build_tvos upload_tvos_app_store
 
