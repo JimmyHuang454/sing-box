@@ -230,28 +230,40 @@ func (g *URLTestGroup) Close() error {
 	return nil
 }
 
+type scoreOutboud struct {
+	score    uint16 // lower is better.
+	outbound *adapter.Outbound
+}
+
 func (g *URLTestGroup) Select(network string) adapter.Outbound {
 	var minDelay uint16
 	var minTime time.Time
-	var minOutbound adapter.Outbound
+	var realOutbound adapter.Outbound
+	var candidateOutbouds []*scoreOutboud
+
 	for _, detour := range g.outbounds {
 		if !common.Contains(detour.Network(), network) {
 			continue
 		}
-		if minOutbound == nil {
-			minOutbound = detour
-		}
+		s := &scoreOutboud{outbound: &detour, score: 0xFFFF}
+		candidateOutbouds = append(candidateOutbouds, s)
+
 		history := g.history.LoadURLTestHistory(RealTag(detour))
 		if history == nil {
 			continue
 		}
-		if minDelay == 0 || minDelay > history.Delay+g.tolerance || minDelay > history.Delay-g.tolerance && minTime.Before(history.Time) {
+		s.score -= history.Delay
+		if time.Now().Sub(history.LastUpdateTime) < g.interval {
+			s.score--
+		}
+
+		if minDelay == 0 || minDelay > history.Delay+g.tolerance || minDelay > history.Delay-g.tolerance && minTime.Before(history.LastUpdateTime) {
 			minDelay = history.Delay
-			minTime = history.Time
-			minOutbound = detour
+			minTime = history.LastUpdateTime
+			realOutbound = detour
 		}
 	}
-	return minOutbound
+	return realOutbound
 }
 
 func (g *URLTestGroup) Fallback(used adapter.Outbound) []adapter.Outbound {
@@ -314,7 +326,7 @@ func (g *URLTestGroup) urlTest(ctx context.Context, link string, force bool) (ma
 			continue
 		}
 		history := g.history.LoadURLTestHistory(realTag)
-		if !force && history != nil && time.Now().Sub(history.Time) < g.interval {
+		if !force && history != nil && time.Now().Sub(history.LastUpdateTime) < g.interval {
 			continue
 		}
 		checked[realTag] = true
@@ -332,8 +344,8 @@ func (g *URLTestGroup) urlTest(ctx context.Context, link string, force bool) (ma
 			} else {
 				g.logger.Debug("outbound ", tag, " available: ", t, "ms")
 				g.history.StoreURLTestHistory(realTag, &urltest.History{
-					Time:  time.Now(),
-					Delay: t,
+					LastUpdateTime: time.Now(),
+					Delay:          t,
 				})
 				resultAccess.Lock()
 				result[tag] = t

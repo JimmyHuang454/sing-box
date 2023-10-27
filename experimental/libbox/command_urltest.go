@@ -83,7 +83,7 @@ func (s *CommandServer) handleURLTest(conn net.Conn) error {
 					historyStorage.DeleteURLTestHistory(outboundTag)
 				} else {
 					historyStorage.StoreURLTestHistory(outboundTag, &urltest.History{
-						Time:  time.Now(),
+						LastUpdateTime:  time.Now(),
 						Delay: t,
 					})
 				}

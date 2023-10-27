@@ -194,7 +194,7 @@ func writeGroups(writer io.Writer, boxService *BoxService) error {
 			item.Tag = itemTag
 			item.Type = itemOutbound.Type()
 			if history := historyStorage.LoadURLTestHistory(adapter.OutboundTag(itemOutbound)); history != nil {
-				item.URLTestTime = history.Time.Unix()
+				item.URLTestTime = history.LastUpdateTime.Unix()
 				item.URLTestDelay = int32(history.Delay)
 			}
 			group.items = append(group.items, &item)

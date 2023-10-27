@@ -112,7 +112,7 @@ func getGroupDelay(server *Server) func(w http.ResponseWriter, r *http.Request) 
 					} else {
 						server.logger.Debug("outbound ", tag, " available: ", t, "ms")
 						server.urlTestHistory.StoreURLTestHistory(realTag, &urltest.History{
-							Time:  time.Now(),
+							LastUpdateTime:  time.Now(),
 							Delay: t,
 						})
 						resultAccess.Lock()

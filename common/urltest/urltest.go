@@ -14,8 +14,8 @@ import (
 )
 
 type History struct {
-	Time  time.Time `json:"time"`
-	Delay uint16    `json:"delay"`
+	LastUpdateTime time.Time `json:"time"`
+	Delay          uint16    `json:"delay"`
 }
 
 type HistoryStorage struct {

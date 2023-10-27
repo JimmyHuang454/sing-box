@@ -208,7 +208,7 @@ func getProxyDelay(server *Server) func(w http.ResponseWriter, r *http.Request) 
 				server.urlTestHistory.DeleteURLTestHistory(realTag)
 			} else {
 				server.urlTestHistory.StoreURLTestHistory(realTag, &urltest.History{
-					Time:  time.Now(),
+					LastUpdateTime:  time.Now(),
 					Delay: delay,
 				})
 			}
