@@ -5,6 +5,7 @@ on:
     tags:        
       - '*' 
     branches:
+      - stable-next
       - main-next
       - dev-next
     paths-ignore:
@@ -13,6 +14,7 @@ on:
       - '!.github/workflows/debug.yml'
   pull_request:
     branches:
+      - stable-next
       - main-next
       - dev-next
 

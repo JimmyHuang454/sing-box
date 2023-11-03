@@ -17,6 +17,7 @@ import (
 	"github.com/sagernet/sing/common/bufio"
 	"github.com/sagernet/sing/common/canceler"
 	E "github.com/sagernet/sing/common/exceptions"
+	M "github.com/sagernet/sing/common/metadata"
 	N "github.com/sagernet/sing/common/network"
 )
 
@@ -119,6 +120,13 @@ func NewPacketConnection(ctx context.Context, this N.Dialer, conn N.PacketConn, 
 		return err
 	}
 	if destinationAddress.IsValid() {
+		if metadata.Destination.IsFqdn() {
+			if metadata.InboundOptions.UDPDisableDomainUnmapping {
+				outConn = bufio.NewUnidirectionalNATPacketConn(bufio.NewPacketConn(outConn), M.SocksaddrFrom(destinationAddress, metadata.Destination.Port), metadata.Destination)
+			} else {
+				outConn = bufio.NewNATPacketConn(bufio.NewPacketConn(outConn), M.SocksaddrFrom(destinationAddress, metadata.Destination.Port), metadata.Destination)
+			}
+		}
 		if natConn, loaded := common.Cast[bufio.NATPacketConn](conn); loaded {
 			natConn.UpdateDestination(destinationAddress)
 		}
@@ -159,6 +167,9 @@ func NewDirectPacketConnection(ctx context.Context, router adapter.Router, this 
 		return err
 	}
 	if destinationAddress.IsValid() {
+		if metadata.Destination.IsFqdn() {
+			outConn = bufio.NewNATPacketConn(bufio.NewPacketConn(outConn), M.SocksaddrFrom(destinationAddress, metadata.Destination.Port), metadata.Destination)
+		}
 		if natConn, loaded := common.Cast[bufio.NATPacketConn](conn); loaded {
 			natConn.UpdateDestination(destinationAddress)
 		}
